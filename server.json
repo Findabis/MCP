@@ -3,7 +3,7 @@
   "name": "com.findabis/findabis",
   "title": "Findabis",
   "description": "Public directory of UK medical cannabis clinics, pharmacies, products and strains.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "websiteUrl": "https://findabis.com",
   "repository": {
     "url": "https://github.com/Findabis/MCP",

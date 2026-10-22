@@ -1,0 +1,8 @@
+{
+  "name": "findabis",
+  "version": "0.4.0",
+  "description": "Public directory of UK medical cannabis clinics, pharmacies, products, strains and brands. Read-only, no login.",
+  "mcpServers": {
+    "findabis": { "httpUrl": "https://findabis.com/api/mcp" }
+  }
+}

@@ -5,6 +5,7 @@ import { publicCaller } from './caller';
 import { type ClinicRow, clinicLine, scenarioFor, toClinicRow } from './clinicRow';
 import { CONDITIONS, matchCondition, nearInput, nearNote, noMatchHint, radiusInput, sites, WIDE_PAGE } from './nearby';
 import { clinicListOutput, patientTypeEnum } from './outputs';
+import { limitInput, offsetInput } from './paging';
 import { excludesPatientType, type PatientType } from './patientTypes';
 import { toolCopy } from './summary';
 
@@ -59,7 +60,8 @@ export const findClinics: PublicMcpTool = {
             .describe(
                 'distance (default with `near`), az (default otherwise), za, cheapest / dearest by year-one clinic fees, rating.',
             ),
-        limit: z.number().int().min(1).max(25).optional().describe('How many to return, 1-25. Default 10.'),
+        limit: limitInput,
+        offset: offsetInput,
     },
     outputSchema: clinicListOutput,
     scopes: ['public'],
@@ -67,6 +69,7 @@ export const findClinics: PublicMcpTool = {
         const { query, near, radiusMiles, consultationType, cqc, maxFirstConsultationFee, acceptingPatients } = input;
         const patientType = input.patientType as PatientType | undefined;
         const limit = input.limit ?? 10;
+        const offset = input.offset ?? 0;
         const sort = input.sort ?? (near ? 'distance' : 'az');
         const condition = matchCondition(input.condition);
         const api = await publicCaller(ctx);
@@ -93,7 +96,7 @@ export const findClinics: PublicMcpTool = {
             );
         if (sort === 'cheapest' || sort === 'dearest') rows = [...rows].sort(byFees(sort === 'dearest'));
         if (sort === 'rating') rows = [...rows].sort((a, b) => (b.rating?.average ?? 0) - (a.rating?.average ?? 0));
-        const results = rows.slice(0, limit);
+        const results = rows.slice(offset, offset + limit);
         const notes = [
             nearNote(near, res.near),
             input.condition && !condition
@@ -114,7 +117,7 @@ export const findClinics: PublicMcpTool = {
                   radiusMiles,
                   filters: [condition, consultationType, cqc, maxFirstConsultationFee, acceptingPatients, patientType],
               });
-        const text = summarise(results.map(clinicLine), rows.length, hint);
+        const text = summarise(results.map(clinicLine), rows.length, hint, offset);
         const next = results.length
             ? '\nNext: get_listing kind=clinic slug=… for one in full, or compare_providers for side by side.'
             : '';

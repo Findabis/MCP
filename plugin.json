@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "findabis",
+  "version": "0.4.0",
+  "description": "Public directory of UK medical cannabis clinics, pharmacies, products, strains and brands. Read-only, no login.",
+  "author": { "name": "Findabis Ltd", "email": "info@findabis.com", "url": "https://findabis.com" },
+  "homepage": "https://findabis.com",
+  "repository": "https://github.com/Findabis/MCP",
+  "license": "MIT",
+  "keywords": ["mcp", "healthcare", "uk", "directory", "clinics", "pharmacies", "read-only"]
+}

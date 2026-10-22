@@ -9,7 +9,7 @@
 <br/>
 
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.findabis%2Ffindabis-01c7a4?style=flat-square&labelColor=090909)](https://registry.modelcontextprotocol.io/)
-[![Read only](https://img.shields.io/badge/tools-8_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
+[![Read only](https://img.shields.io/badge/tools-9_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
 [![No login](https://img.shields.io/badge/login-not_needed-01c7a4?style=flat-square&labelColor=090909)](#what-it-can-and-cant-see)
 [![Licence](https://img.shields.io/badge/licence-MIT-01c7a4?style=flat-square&labelColor=090909)](LICENSE)
 
@@ -34,6 +34,10 @@ https://findabis.com/api/mcp
 That's it. No account, no API key.
 
 **Claude** (claude.ai or the desktop app): Settings → Connectors → *Add custom connector*, call it Findabis, paste the URL.
+
+**Cursor:** [Add to Cursor](https://cursor.com/en/install-mcp?name=findabis&config=eyJ1cmwiOiJodHRwczovL2ZpbmRhYmlzLmNvbS9hcGkvbWNwIn0=) — one click, or install it as a plugin: this repo follows the [Agent Plugins](https://agent-plugins.org) standard (`plugin.json` + `mcp.json`).
+
+**Gemini CLI:** `gemini extensions install https://github.com/Findabis/MCP`
 
 **Claude Code:**
 
@@ -80,7 +84,7 @@ Anything else that speaks MCP: use streamable HTTP at the URL above. The registr
 
 ## The tools
 
-There are eight, and they all just read:
+There are nine, and they all just read:
 
 | Tool | What it's for |
 |---|---|
@@ -89,9 +93,12 @@ There are eight, and they all just read:
 | `find_products` | Products by name, brand, strain or form, with THC/CBD and the latest published UK price |
 | `get_product` | Everything public about one product: strength, terpenes, ingredients, allergens, leaflets |
 | `find_strains` | Strain profiles by name or genetics |
+| `find_brands` | The brands behind UK products, by name or dose form, with how many products each lists |
 | `get_listing` | One clinic, pharmacy, strain or brand page in full |
 | `compare_providers` | Two to six clinics or pharmacies side by side |
 | `search_findabis` | One search across the lot, when you're not sure what you're looking for |
+
+The list tools return up to 25 at a time; pass `offset` for the next page (each answer says where it starts).
 
 ## What it can and can't see
 
@@ -123,7 +130,7 @@ It runs inside the Findabis app and uses the app's own database and helpers, so 
 |---|---|
 | [`src/app/api/mcp/route.ts`](src/app/api/mcp/route.ts) | The endpoint: rate limits and the connection |
 | [`src/server/mcp/publicServer.ts`](src/server/mcp/publicServer.ts) | Registers the tools with their read-only hints |
-| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The eight tools and the shape of what they return |
+| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The nine tools and the shape of what they return |
 | [`src/server/mcp/disclaimer.ts`](src/server/mcp/disclaimer.ts) | The medical disclaimer every session gets |
 
 ## Licence

@@ -19,7 +19,7 @@ export type McpScope = 'public' | 'entity:read' | 'entity:write' | 'agent';
  * at /.well-known/mcp/server.json — three places that must never disagree.
  * A bump means a re-publish to the registry (docs/MCP_PLAN.md, the end).
  */
-export const MCP_SERVER_VERSION = '0.3.0';
+export const MCP_SERVER_VERSION = '0.4.0';
 
 export type McpTool = {
     name: string;
@@ -94,10 +94,14 @@ export const asError = (text: string) => ({ ...asContent(text), isError: true })
  * Models do not page well: threading a cursor across turns goes wrong, and a
  * hundred rows crowds out the reasoning they were fetched for. Every list
  * tool returns a short slice and says how much it left, so the model narrows
- * with a filter instead.
+ * with a filter first; a plain `offset` (no cursor to carry) reads on when
+ * the whole list is what was asked for.
  */
-export function summarise(rows: string[], total: number, hint: string): string {
-    if (!rows.length) return `No matches. ${hint}`;
-    const more = total > rows.length ? `\n\nShowing ${rows.length} of ${total}. ${hint}` : '';
+export function summarise(rows: string[], total: number, hint: string, offset = 0): string {
+    if (!rows.length) return offset ? `No more matches: ${total} in all.` : `No matches. ${hint}`;
+    const end = offset + rows.length;
+    const shown = offset ? `${offset + 1}-${end}` : String(rows.length);
+    const next = total > end ? ` Next page: offset=${end}.` : '';
+    const more = total > rows.length ? `\n\nShowing ${shown} of ${total}. ${hint}${next}` : '';
     return `${rows.join('\n')}${more}`;
 }

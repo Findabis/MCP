@@ -6,6 +6,7 @@ import { publicCaller } from './caller';
 import { place, ratingOf, stars, str } from './clinicRow';
 import { nearInput, nearNote, radiusInput, sites, WIDE_PAGE } from './nearby';
 import { pharmacyListOutput, type pharmacyRow } from './outputs';
+import { limitInput, offsetInput } from './paging';
 import { toolCopy } from './summary';
 
 type PharmacyRow = z.infer<typeof pharmacyRow>;
@@ -43,11 +44,15 @@ export const findPharmacies: PublicMcpTool = {
             .enum(['distance', 'az', 'za', 'city', 'rating'])
             .optional()
             .describe('distance (default with `near`), az (default otherwise), za, city, rating.'),
-        limit: z.number().int().min(1).max(25).optional().describe('How many to return, 1-25. Default 10.'),
+        limit: limitInput,
+        offset: offsetInput,
     },
     outputSchema: pharmacyListOutput,
     scopes: ['public'],
-    handler: async ({ query, near, radiusMiles, delivers, collection, minRating, sort, limit = 10 }, ctx) => {
+    handler: async (
+        { query, near, radiusMiles, delivers, collection, minRating, sort, limit = 10, offset = 0 },
+        ctx,
+    ) => {
         const order = sort ?? (near ? 'distance' : 'az');
         const api = await publicCaller(ctx);
         const res: any = await api.pharmacy.getPagedPharmacies({
@@ -63,7 +68,7 @@ export const findPharmacies: PublicMcpTool = {
             .map(toPharmacyRow)
             .filter((r) => !collection || r.offersCollection);
         if (order === 'rating') rows = [...rows].sort((a, b) => (b.rating?.average ?? 0) - (a.rating?.average ?? 0));
-        const results = rows.slice(0, limit);
+        const results = rows.slice(offset, offset + limit);
         const note =
             [
                 nearNote(near, res.near),
@@ -82,7 +87,7 @@ export const findPharmacies: PublicMcpTool = {
             ? '\nNext: get_listing kind=pharmacy slug=… for delivery prices, or compare_providers.'
             : '';
         return {
-            text: `${summarise(results.map(pharmacyLine), rows.length, hint)}${note ? `\n${note}` : ''}${next}`,
+            text: `${summarise(results.map(pharmacyLine), rows.length, hint, offset)}${note ? `\n${note}` : ''}${next}`,
             structured: { results, total: rows.length, ...(note ? { note } : {}) },
         };
     },

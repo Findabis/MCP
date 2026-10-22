@@ -7,9 +7,10 @@ import { productDisplayName } from '@/utils';
 import { percentRange } from '@/utils/percentRange';
 import { publicCaller } from './caller';
 import { productListOutput, type productRow, strainListOutput, type strainRow } from './outputs';
+import { limitInput, offsetInput, readWindow } from './paging';
 import { toolCopy } from './summary';
 
-const CATEGORIES = ['FLOWER', 'OIL', 'CAPSULE', 'EDIBLE', 'TOPICAL', 'CARTRIDGE', 'HASH'] as const;
+export const CATEGORIES = ['FLOWER', 'OIL', 'CAPSULE', 'EDIBLE', 'TOPICAL', 'CARTRIDGE', 'HASH'] as const;
 
 /** The strain types the strain pages file under (`strain_types`), as the website's genetics filter matches them */
 export const GENETICS = ['Indica', 'Sativa', 'Hybrid'] as const;
@@ -23,7 +24,6 @@ export const GENETICS = ['Indica', 'Sativa', 'Hybrid'] as const;
 const WITHHELD = 'stock and per-pharmacy prices: shown only to patients and professionals with access';
 
 const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null);
-const limit = z.number().int().min(1).max(25).optional().describe('How many to return, 1-25. Default 10.');
 
 /** The card's "Latest price": public only while the public price switch is on */
 function latestPrice(p: any): z.infer<typeof productRow>['latestPrice'] {
@@ -62,22 +62,20 @@ export const findProducts: PublicMcpTool = {
             .describe('Product, brand or strain name, e.g. "Pink Kush" or "Tilray". Omit to browse.'),
         category: z.enum(CATEGORIES).optional().describe('Dose form. CARTRIDGE is a vape cartridge.'),
         sort: z.enum(['name_asc', 'name_desc']).optional().describe('Alphabetical, name_asc (default) or name_desc.'),
-        limit,
+        limit: limitInput,
+        offset: offsetInput,
     },
     outputSchema: productListOutput,
     scopes: ['public'],
-    handler: async ({ query, category, sort = 'name_asc', limit = 10 }, ctx) => {
+    handler: async ({ query, category, sort = 'name_asc', limit = 10, offset = 0 }, ctx) => {
         const api = await publicCaller(ctx);
-        const res: any = await api.catalogProduct.getPagedWithPricing({
-            search: query?.trim() || undefined,
-            category,
-            sort,
-            perPage: limit,
-            countryCode: 'GB',
-        });
-        const results = (res.items ?? []).slice(0, limit).map(toProductRow);
-        const total = Number(res.total ?? results.length);
-        const text = summarise(results.map(productLine), total, 'Narrow with `query` or `category`.');
+        const search = query?.trim() || undefined;
+        const res = await readWindow<any>(offset, limit, (page, perPage) =>
+            api.catalogProduct.getPagedWithPricing({ search, category, sort, page, perPage, countryCode: 'GB' }),
+        );
+        const results = res.items.map(toProductRow);
+        const total = res.total;
+        const text = summarise(results.map(productLine), total, 'Narrow with `query` or `category`.', offset);
         return { text: results.length ? `${text}\n(${WITHHELD})` : text, structured: { results, total } };
     },
 };
@@ -103,22 +101,21 @@ export const findStrains: PublicMcpTool = {
     inputSchema: {
         query: z.string().max(120).optional().describe('Strain name or nickname, e.g. "Gelato". Omit to browse.'),
         genetics: z.enum(GENETICS).optional().describe('The strain type: Indica, Sativa or Hybrid.'),
-        limit,
+        limit: limitInput,
+        offset: offsetInput,
     },
     outputSchema: strainListOutput,
     scopes: ['public'],
-    handler: async ({ query, genetics, limit = 10 }, ctx) => {
+    handler: async ({ query, genetics, limit = 10, offset = 0 }, ctx) => {
         const api = await publicCaller(ctx);
-        const res: any = await api.strain.getPagedStrains({
-            search: query?.trim() || undefined,
-            genetics,
-            sort: 'az',
-            perPage: limit,
-        });
-        const results = (res.items ?? []).slice(0, limit).map(toStrainRow);
-        const total = Number(res.total ?? results.length);
+        const search = query?.trim() || undefined;
+        const res = await readWindow<any>(offset, limit, (page, perPage) =>
+            api.strain.getPagedStrains({ search, genetics, sort: 'az', page, perPage }),
+        );
+        const results = res.items.map(toStrainRow);
+        const total = res.total;
         return {
-            text: summarise(results.map(strainLine), total, 'Narrow with `query` or `genetics`.'),
+            text: summarise(results.map(strainLine), total, 'Narrow with `query` or `genetics`.', offset),
             structured: { results, total },
         };
     },

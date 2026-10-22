@@ -87,6 +87,19 @@ export const strainRow = z.object({
     cbdPercent: z.string().nullable(),
 });
 
+export const brandRow = z.object({
+    name: z.string(),
+    slug: z.string().nullable(),
+    url,
+    city: z.string().nullable(),
+    country: z.string().nullable(),
+    website: z.string().nullable(),
+    productCount: z
+        .number()
+        .int()
+        .describe('Products of this brand listed on Findabis (approved and not withdrawn); a count, never stock'),
+});
+
 export const searchRow = z.object({
     kind: z.enum(['clinic', 'pharmacy', 'product', 'strain', 'brand']),
     name: z.string(),
@@ -98,6 +111,7 @@ export const clinicListOutput = list(clinicRow);
 export const pharmacyListOutput = list(pharmacyRow);
 export const productListOutput = list(productRow);
 export const strainListOutput = list(strainRow);
+export const brandListOutput = list(brandRow);
 export const searchOutput = { results: z.array(searchRow) };
 
 /** A named link — a partner, a lineage parent, a product made from a strain */
