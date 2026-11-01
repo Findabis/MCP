@@ -3,6 +3,22 @@
 Versions match the `version` the server reports in its handshake and on its
 [registry card](https://findabis.com/.well-known/mcp/server.json).
 
+## 0.5.0 — 2026-11
+
+- `search_findabis` answers "what is X" in one call: every hit carries a one-line summary (town, consultation types
+  and first fee for a clinic; delivery and collection for a pharmacy; brand, dose form, THC and CBD for a product;
+  genetics for a strain; country and product count for a brand), its slug is printed in the text, and Findabis
+  articles are searched too.
+- `get_listing` returns the page's own FAQs and opening hours (in-person and, for clinics, the online diary).
+- New `get_directory_facts`: how many clinics, pharmacies, products, strains and brands are listed, the range and
+  median of published first-consultation fees, how many pharmacies deliver or offer collection, and when each
+  directory last changed. Aggregates only, each with its directory page.
+- Two more prompts beside `find_care_near`: `product_facts` (a product name) and `check_provider` (a clinic or
+  pharmacy name).
+- The server's `instructions` now end with a short routing guide: which tool answers which question, that slugs come
+  from the find tools, that lists cap at 25, that nothing is ordered by sponsorship, and that the guides exist.
+- `llms.txt` and the GET probe count tools, guides and prompts from the code (`llms.txt` still said seven).
+
 ## 0.4.0 — 2026-10
 
 - New `find_brands`: brands by name or dose form, with page link, location, website and how many products each

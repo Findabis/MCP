@@ -3,7 +3,17 @@ import type { PublicMcpTool } from '@/server/mcp/registry';
 import { summarise } from '@/server/mcp/registry';
 import { publicCaller } from './caller';
 import { type ClinicRow, clinicLine, scenarioFor, toClinicRow } from './clinicRow';
-import { CONDITIONS, matchCondition, nearInput, nearNote, noMatchHint, radiusInput, sites, WIDE_PAGE } from './nearby';
+import {
+    CONDITIONS,
+    matchCondition,
+    nearInput,
+    nearNote,
+    noMatchHint,
+    pastWideRead,
+    radiusInput,
+    sites,
+    WIDE_PAGE,
+} from './nearby';
 import { clinicListOutput, patientTypeEnum } from './outputs';
 import { limitInput, offsetInput } from './paging';
 import { excludesPatientType, type PatientType } from './patientTypes';
@@ -117,7 +127,9 @@ export const findClinics: PublicMcpTool = {
                   radiusMiles,
                   filters: [condition, consultationType, cqc, maxFirstConsultationFee, acceptingPatients, patientType],
               });
-        const text = summarise(results.map(clinicLine), rows.length, hint, offset);
+        const text =
+            pastWideRead(offset, rows.length, Number(res.total ?? 0)) ??
+            summarise(results.map(clinicLine), rows.length, hint, offset);
         const next = results.length
             ? '\nNext: get_listing kind=clinic slug=… for one in full, or compare_providers for side by side.'
             : '';

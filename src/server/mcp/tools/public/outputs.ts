@@ -101,10 +101,14 @@ export const brandRow = z.object({
 });
 
 export const searchRow = z.object({
-    kind: z.enum(['clinic', 'pharmacy', 'product', 'strain', 'brand']),
+    kind: z.enum(['clinic', 'pharmacy', 'product', 'strain', 'brand', 'article']),
     name: z.string(),
     slug: z.string().nullable(),
     url,
+    summary: z
+        .string()
+        .nullable()
+        .describe('One line of public facts: town, services, fees, dose form, strength, genetics or country'),
 });
 
 export const clinicListOutput = list(clinicRow);
@@ -116,3 +120,35 @@ export const searchOutput = { results: z.array(searchRow) };
 
 /** A named link — a partner, a lineage parent, a product made from a strain */
 export const linkRow = z.object({ name: z.string(), url });
+
+/** One directory in `get_directory_facts`: a count and its page, never a row */
+const directory = <T extends z.ZodRawShape>(extra: T) =>
+    z.object({
+        count: z.number().int().describe('Listings in the UK directory right now'),
+        url: z.string().url().describe('The directory page, absolute'),
+        ...extra,
+    });
+const date = z.string().nullable().describe('YYYY-MM-DD');
+
+export const factsOutput = {
+    asOf: z.string().describe('The day these figures were read, YYYY-MM-DD'),
+    country: z.literal('GB'),
+    clinics: directory({
+        firstConsultationFee: z
+            .object({ min: z.number(), max: z.number(), median: z.number(), stated: z.number().int() })
+            .nullable()
+            .describe(
+                'Published first-consultation fees in GBP across the clinics that state one; null when none does',
+            ),
+        updatedAt: date.describe('When a listed clinic last changed its listing'),
+    }).nullable(),
+    pharmacies: directory({
+        delivery: z.number().int().describe('How many deliver'),
+        collection: z.number().int().describe('How many offer in-person collection'),
+        updatedAt: date.describe('When a listed pharmacy last changed its listing'),
+    }).nullable(),
+    products: directory({}),
+    strains: directory({}),
+    brands: directory({}),
+    note: z.string(),
+};

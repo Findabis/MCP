@@ -15,6 +15,16 @@ import { toPharmacyRow } from './pharmacies';
 const text = z.string().nullable();
 const links = z.array(linkRow);
 
+export const DAYS = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'] as const;
+
+/** The page's opening hours as the business typed them, by day; null when it publishes none */
+const hours = z
+    .object(Object.fromEntries(DAYS.map((day) => [day, text])) as Record<(typeof DAYS)[number], typeof text>)
+    .nullable();
+export type Hours = NonNullable<z.infer<typeof hours>>;
+
+const faqs = z.array(z.object({ question: z.string(), answer: z.string(), aiAssisted: z.boolean() }));
+
 const clinicDetail = clinicRow.extend({
     address: text,
     website: text,
@@ -24,6 +34,8 @@ const clinicDetail = clinicRow.extend({
     cqcReportUrl: text,
     minimumAge: z.number().int().nullable(),
     maximumAge: z.number().int().nullable(),
+    openingHours: hours,
+    onlineHours: hours.describe('The online (video) diary, when the clinic publishes separate hours for it'),
     partnerPharmacies: links,
     otherLocations: links,
 });
@@ -43,6 +55,7 @@ const pharmacyDetail = pharmacyRow.extend({
     gphcNumber: text,
     gphcInspectionOutcome: text,
     gphcReportUrl: text,
+    openingHours: hours,
     partnerClinics: links,
     otherLocations: links,
 });
@@ -67,6 +80,9 @@ export const listingOutput = {
     url: z.string().url().nullable(),
     description: text,
     descriptionAiAssisted: z.boolean(),
+    faqs: faqs.describe(
+        "The page's own FAQs, at most five; an answer is marked AI-assisted when the page labels it so",
+    ),
     clinic: clinicDetail.optional(),
     pharmacy: pharmacyDetail.optional(),
     strain: strainDetail.optional(),
@@ -77,6 +93,11 @@ export type ListingOutput = z.infer<z.ZodObject<typeof listingOutput>>;
 
 const str = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null);
 const int = (v: unknown) => (typeof v === 'number' && Number.isInteger(v) ? v : null);
+/** The hours row by day, or null when every day is blank (none published) */
+const hoursOf = (h: Record<string, unknown> | null | undefined): Hours | null => {
+    const byDay = Object.fromEntries(DAYS.map((day) => [day, str(h?.[day])])) as Hours;
+    return DAYS.some((day) => byDay[day]) ? byDay : null;
+};
 const address = (r: any) =>
     [r.address, r.addressLine2, r.town ?? r.city, r.postcode].map(str).filter(Boolean).join(', ') || null;
 const linkTo = (kind: ListingKind, rows: any[] | undefined, name = (r: any) => String(r?.name ?? '')) =>
@@ -102,6 +123,8 @@ const base = (kind: ListingOutput['kind'], r: any) => ({
     url: pageUrl(kind, r.slug),
     description: plainText(r.description, 500) || null,
     descriptionAiAssisted: Boolean(r.aiAssisted && plainText(r.description, 500)),
+    // The handler fills these from the page's FAQ table; the shape itself reads one row
+    faqs: [],
 });
 
 export function toClinicListing(c: any): ListingOutput {
@@ -119,6 +142,8 @@ export function toClinicListing(c: any): ListingOutput {
             cqcReportUrl: str(c.cqcReportUrl),
             minimumAge: int(policy?.minimumAge),
             maximumAge: int(policy?.maximumAge),
+            openingHours: hoursOf(c.openingHours),
+            onlineHours: hoursOf(c.onlineOpeningHours),
             partnerPharmacies: linkTo(
                 'pharmacy',
                 (c.connectedPharmacies ?? []).map((x: any) => x.pharmacy ?? x),
@@ -145,6 +170,7 @@ export function toPharmacyListing(p: any): ListingOutput {
             gphcNumber: str(p.compliance?.gphcNumber),
             gphcInspectionOutcome: str(p.compliance?.gphcOutcome),
             gphcReportUrl: str(p.compliance?.gphcReportUrl),
+            openingHours: hoursOf(p.openingHours),
             partnerClinics: linkTo(
                 'clinic',
                 (p.connectedClinics ?? []).map((x: any) => x.clinic ?? x),

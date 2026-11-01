@@ -4,6 +4,7 @@ import { resolveMcpCaller } from '@/server/mcp/callerIdentity';
 import { MCP_SERVER_DESCRIPTION, MEDICAL_DISCLAIMER } from '@/server/mcp/disclaimer';
 import { MCP_GUIDES } from '@/server/mcp/guides';
 import { MCP_KEYED_RATE_LIMIT, MCP_RATE_LIMIT } from '@/server/mcp/limits';
+import { PUBLIC_PROMPTS } from '@/server/mcp/prompts';
 import { createPublicMcpServer } from '@/server/mcp/publicServer';
 import { MCP_SERVER_VERSION, type McpCallContext } from '@/server/mcp/registry';
 import { publicTools } from '@/server/mcp/tools/public';
@@ -123,7 +124,7 @@ export function GET(request: Request) {
             },
             tools: publicTools.map((t) => ({ name: t.name, description: t.description })),
             resources: MCP_GUIDES.map((g) => ({ uri: g.uri, title: g.title })),
-            prompts: [{ name: 'find_care_near', arguments: ['place'] }],
+            prompts: PUBLIC_PROMPTS.map((p) => ({ name: p.name, arguments: Object.keys(p.argsSchema) })),
         }),
     );
 }

@@ -70,3 +70,13 @@ export function noMatchHint({
     ].filter(Boolean);
     return `Try: ${tips.join('; ')}.`;
 }
+
+/**
+ * These tools page inside the WIDE_PAGE rows they read. Past those, `summarise`'s "no more matches: N in all" would be
+ * false when the directory holds more, so say where paging stops (the read-cap note says how to reach the rest).
+ */
+export function pastWideRead(offset: number, read: number, total: number): string | null {
+    return offset > 0 && offset >= read && total > WIDE_PAGE
+        ? `No more in the ${read} read; \`offset\` cannot page past them.`
+        : null;
+}

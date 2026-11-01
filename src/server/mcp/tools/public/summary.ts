@@ -55,7 +55,7 @@ export const PUBLIC_TOOL_SUMMARY: PublicToolSummary[] = [
         name: 'get_listing',
         title: 'Get one clinic, pharmacy, strain or brand',
         description:
-            'The public facts on one clinic, pharmacy, strain or brand page, by `kind` and the page `slug` from find_clinics, find_pharmacies, find_strains, find_brands or search_findabis. Clinic: address, consultation types and fees, published price list, CQC rating, which patients its policy takes, partner pharmacies. Pharmacy: address, delivery and collection, delivery prices, GPhC registration, partner clinics. Strain: genetics, cannabinoid ranges, terpenes, flavours, lineage, products made from it. Brand: location, website and products. Not returned: stock, per-pharmacy medicine prices, staff, or anything about patients. For a product, use get_product.',
+            "The public facts on one clinic, pharmacy, strain or brand page, by `kind` and the page `slug` from find_clinics, find_pharmacies, find_strains, find_brands or search_findabis. Clinic: address, opening hours, consultation types and fees, published price list, CQC rating and registration, which patients its policy takes, partner pharmacies. Pharmacy: address, opening hours, delivery and collection, delivery prices, GPhC registration and inspection outcome, partner clinics. Strain: genetics, cannabinoid ranges, terpenes, flavours, lineage, products made from it. Brand: location, website and products. Every kind: the page's own FAQs. Not returned: stock, per-pharmacy medicine prices, staff, or anything about patients. For a product, use get_product.",
     },
     {
         name: 'compare_providers',
@@ -67,7 +67,13 @@ export const PUBLIC_TOOL_SUMMARY: PublicToolSummary[] = [
         name: 'search_findabis',
         title: 'Search everything',
         description:
-            'One text search across clinics, pharmacies, products, strains and brands. Use it when you do not yet know which kind the question is about, or to turn a name into a slug; then call the specific tool, which returns more detail. Returns names, kinds, slugs and page URLs only — no prices, stock or medical information.',
+            'One text search across clinics, pharmacies, products, strains, brands and Findabis articles; small misspellings still match. Use it when you do not yet know which kind the question is about, or to turn a name into a slug. Each match carries its kind, slug, page URL and a one-line summary (town, consultation types and first fee for a clinic; delivery and collection for a pharmacy; brand, dose form, THC and CBD for a product; genetics for a strain; country and product count for a brand), enough to say what something is; call the specific tool for more. No stock, per-pharmacy prices or medical information.',
+    },
+    {
+        name: 'get_directory_facts',
+        title: 'Directory facts and counts',
+        description:
+            "Live figures for the whole UK directory: how many clinics, pharmacies, products, strains and brands Findabis lists; the range and median of the first-consultation fees clinics publish; how many pharmacies deliver or offer collection; and when each directory last changed. Use it for 'how many', 'what does a first consultation typically cost', 'what does Findabis cover', and to cite a figure with its date. Takes no input. Aggregates only: it names no provider and holds no stock or medicine prices. For the listings themselves, use the find_ tools.",
     },
 ];
 

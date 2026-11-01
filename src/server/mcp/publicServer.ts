@@ -1,15 +1,15 @@
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { TRPCError } from '@trpc/server';
-import { z } from 'zod';
-import { MCP_SERVER_INSTRUCTIONS } from './disclaimer';
 import { MCP_GUIDES } from './guides';
+import { PUBLIC_MCP_INSTRUCTIONS } from './instructions';
+import { PUBLIC_PROMPTS } from './prompts';
 import { asError, asResult, type McpCallContext, McpToolError, type PublicMcpTool } from './registry';
 import { MCP_SERVER_INFO } from './serverInfo';
 import { publicTools } from './tools/public';
 
 /**
  * The public MCP server for one request: the public tools, the static guides
- * as resources and one prompt. Nothing here takes a health answer, an id, an
+ * as resources and the prompts. Nothing here takes a health answer, an id, an
  * email or a phone number — the inputs are text queries, enums and page slugs.
  *
  * Every public tool is advertised read-only, idempotent and closed-world: it
@@ -42,31 +42,11 @@ export function runPublicTool(tool: PublicMcpTool, ctx: McpCallContext, allowCal
     };
 }
 
-/** A UK town or postcode: letters, digits, spaces and the punctuation place names use — nothing else reaches the prompt */
-const placeInput = z
-    .string()
-    .trim()
-    .min(2)
-    .max(60)
-    .regex(/^[A-Za-z0-9 ,.'()-]+$/, 'A UK town, city or postcode')
-    .describe('A UK town, city or postcode, e.g. "Leeds" or "M1 1AE".');
-
-export function findCareNearPrompt(place: string): string {
-    return [
-        `Find medical cannabis clinics and dispensing pharmacies near ${place}, UK, using the Findabis tools.`,
-        '',
-        `1. Call find_clinics with near "${place}" (nearest first, with miles). Many clinics also consult online UK-wide: if few are close, call it again with consultationType ONLINE and no near.`,
-        `2. Call find_pharmacies with near "${place}". Most deliver UK-wide, so delivery matters more than distance.`,
-        "3. List what you found with each listing's Findabis page URL, town, distance, and for clinics the published fees. Use only the distances the tools return. To weigh two or more, call compare_providers.",
-        '4. Say plainly that Findabis is a directory, not medical advice; that only a specialist decides whether anyone can be prescribed; and that a pharmacy dispenses only against a prescription a clinic has issued.',
-        '5. For the route to a prescription, read the resource findabis://guide/how-to-get-a-prescription.',
-    ].join('\n');
-}
-
 export function createPublicMcpServer(ctx: McpCallContext, allowCall: () => Promise<boolean>): McpServer {
     // `instructions` travels in the initialize response and clients place it in
-    // the model's context — the one place a disclaimer reaches every tool call
-    const server = new McpServer(MCP_SERVER_INFO, { instructions: MCP_SERVER_INSTRUCTIONS });
+    // the model's context — the one place the disclaimer and the tool routing
+    // reach every tool call
+    const server = new McpServer(MCP_SERVER_INFO, { instructions: PUBLIC_MCP_INSTRUCTIONS });
 
     for (const tool of publicTools) {
         server.registerTool(
@@ -91,19 +71,16 @@ export function createPublicMcpServer(ctx: McpCallContext, allowCall: () => Prom
         );
     }
 
-    server.registerPrompt(
-        'find_care_near',
-        {
-            title: 'Find care near a place',
-            description:
-                'Clinics and dispensing pharmacies near a UK town or postcode, with Findabis page links. Takes only a place.',
-            argsSchema: { place: placeInput },
-        },
-        ({ place }) => ({
-            description: `Clinics and pharmacies near ${place}`,
-            messages: [{ role: 'user', content: { type: 'text', text: findCareNearPrompt(place) } }],
-        }),
-    );
+    for (const prompt of PUBLIC_PROMPTS) {
+        server.registerPrompt(
+            prompt.name,
+            { title: prompt.title, description: prompt.description, argsSchema: prompt.argsSchema },
+            (args) => ({
+                description: prompt.summary(args),
+                messages: [{ role: 'user', content: { type: 'text', text: prompt.text(args) } }],
+            }),
+        );
+    }
 
     return server;
 }

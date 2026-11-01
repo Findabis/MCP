@@ -61,17 +61,29 @@ export const findProducts: PublicMcpTool = {
             .optional()
             .describe('Product, brand or strain name, e.g. "Pink Kush" or "Tilray". Omit to browse.'),
         category: z.enum(CATEGORIES).optional().describe('Dose form. CARTRIDGE is a vape cartridge.'),
+        genetics: z
+            .enum(GENETICS)
+            .optional()
+            .describe("The strain type: Indica, Sativa or Hybrid (the product's own, else its primary strain's)."),
         sort: z.enum(['name_asc', 'name_desc']).optional().describe('Alphabetical, name_asc (default) or name_desc.'),
         limit: limitInput,
         offset: offsetInput,
     },
     outputSchema: productListOutput,
     scopes: ['public'],
-    handler: async ({ query, category, sort = 'name_asc', limit = 10, offset = 0 }, ctx) => {
+    handler: async ({ query, category, genetics, sort = 'name_asc', limit = 10, offset = 0 }, ctx) => {
         const api = await publicCaller(ctx);
         const search = query?.trim() || undefined;
         const res = await readWindow<any>(offset, limit, (page, perPage) =>
-            api.catalogProduct.getPagedWithPricing({ search, category, sort, page, perPage, countryCode: 'GB' }),
+            api.catalogProduct.getPagedWithPricing({
+                search,
+                category,
+                strainType: genetics,
+                sort,
+                page,
+                perPage,
+                countryCode: 'GB',
+            }),
         );
         const results = res.items.map(toProductRow);
         const total = res.total;

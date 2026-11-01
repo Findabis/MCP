@@ -9,7 +9,7 @@
 <br/>
 
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.findabis%2Ffindabis-01c7a4?style=flat-square&labelColor=090909)](https://registry.modelcontextprotocol.io/)
-[![Read only](https://img.shields.io/badge/tools-9_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
+[![Read only](https://img.shields.io/badge/tools-10_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
 [![No login](https://img.shields.io/badge/login-not_needed-01c7a4?style=flat-square&labelColor=090909)](#what-it-can-and-cant-see)
 [![Licence](https://img.shields.io/badge/licence-MIT-01c7a4?style=flat-square&labelColor=090909)](LICENSE)
 
@@ -77,14 +77,17 @@ Anything else that speaks MCP: use streamable HTTP at the URL above. The registr
 
 ## Things you can ask
 
+- *"What's Blue Dream, and what does Findabis list for it?"*
 - *"Which clinics near Leeds do video consultations, and what's the first appointment?"*
 - *"Compare these three clinics on what a new patient pays in the first year."*
 - *"What's actually in this oil — carrier oil, allergens, THC and CBD?"*
 - *"Find me pharmacies near SW1A that deliver."*
+- *"How many clinics are on Findabis, and what does a first consultation typically cost?"*
+- *"Is this pharmacy registered, and what did its last GPhC inspection say?"*
 
 ## The tools
 
-There are nine, and they all just read:
+There are ten, and they all just read:
 
 | Tool | What it's for |
 |---|---|
@@ -94,11 +97,14 @@ There are nine, and they all just read:
 | `get_product` | Everything public about one product: strength, terpenes, ingredients, allergens, leaflets |
 | `find_strains` | Strain profiles by name or genetics |
 | `find_brands` | The brands behind UK products, by name or dose form, with how many products each lists |
-| `get_listing` | One clinic, pharmacy, strain or brand page in full |
+| `get_listing` | One clinic, pharmacy, strain or brand page in full, with its FAQs and opening hours |
 | `compare_providers` | Two to six clinics or pharmacies side by side |
-| `search_findabis` | One search across the lot, when you're not sure what you're looking for |
+| `search_findabis` | One search across the lot, plus Findabis articles, when you're not sure what you're looking for; every hit comes with a one-line summary |
+| `get_directory_facts` | How many clinics, pharmacies, products, strains and brands are listed, the spread of first-consultation fees, how many pharmacies deliver |
 
 The list tools return up to 25 at a time; pass `offset` for the next page (each answer says where it starts).
+
+There are also three prompts, which show up as slash-commands in Claude Desktop, Claude Code and Cursor: `find_care_near` (a town or postcode), `product_facts` (a product name) and `check_provider` (a clinic or pharmacy name). And three guides the assistant can read: how to get a prescription in the UK, who clinics take, and what Findabis is.
 
 ## What it can and can't see
 
@@ -129,8 +135,10 @@ It runs inside the Findabis app and uses the app's own database and helpers, so 
 | Where | What |
 |---|---|
 | [`src/app/api/mcp/route.ts`](src/app/api/mcp/route.ts) | The endpoint: rate limits and the connection |
-| [`src/server/mcp/publicServer.ts`](src/server/mcp/publicServer.ts) | Registers the tools with their read-only hints |
-| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The nine tools and the shape of what they return |
+| [`src/server/mcp/publicServer.ts`](src/server/mcp/publicServer.ts) | Registers the tools with their read-only hints, the guides and the prompts |
+| [`src/server/mcp/prompts.ts`](src/server/mcp/prompts.ts) | The three prompts and what each asks the assistant to do |
+| [`src/server/mcp/instructions.ts`](src/server/mcp/instructions.ts) | The tool-routing guide every session gets after the disclaimer |
+| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The ten tools and the shape of what they return |
 | [`src/server/mcp/disclaimer.ts`](src/server/mcp/disclaimer.ts) | The medical disclaimer every session gets |
 
 ## Licence

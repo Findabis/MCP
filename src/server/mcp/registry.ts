@@ -19,7 +19,7 @@ export type McpScope = 'public' | 'entity:read' | 'entity:write' | 'agent';
  * at /.well-known/mcp/server.json — three places that must never disagree.
  * A bump means a re-publish to the registry (docs/MCP_PLAN.md, the end).
  */
-export const MCP_SERVER_VERSION = '0.4.0';
+export const MCP_SERVER_VERSION = '0.5.0';
 
 export type McpTool = {
     name: string;

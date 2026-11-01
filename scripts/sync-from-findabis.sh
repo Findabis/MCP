@@ -10,7 +10,7 @@ APP="${1:-../Findabis}"
 rm -rf src
 mkdir -p src/server/mcp/tools/public src/app/api/mcp "src/app/.well-known/mcp/server.json"
 
-for f in callerIdentity disclaimer guides limits links publicServer registry serverInfo; do
+for f in callerIdentity disclaimer guides instructions limits links prompts publicServer registry serverInfo; do
     cp "$APP/src/server/mcp/$f.ts" src/server/mcp/
 done
 cp "$APP"/src/server/mcp/tools/public/*.ts src/server/mcp/tools/public/
