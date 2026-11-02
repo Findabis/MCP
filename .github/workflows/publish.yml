@@ -1,0 +1,160 @@
+name: Publish to the MCP Registry
+
+# Re-lists com.findabis/findabis in the official MCP Registry after a release, then creates the GitHub release.
+# Starts on a v* tag (scripts/release.sh pushes one) or by hand. It publishes exactly what findabis.com serves: it
+# waits until the live server card and the GET probe both report the tagged version, so the registry never describes
+# a version the server does not. Glama, PulseMCP, mcprush and GitHub's MCP registry import from the official one.
+#
+# One repository secret: MCP_REGISTRY_PRIVATE_KEY — the hex Ed25519 key whose public half findabis.com serves at
+# /.well-known/mcp-registry-auth (the namespace claim). See RELEASING.md.
+
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      wait_minutes:
+        description: How long to wait for findabis.com to serve the version in server.json
+        default: '30'
+        required: false
+
+concurrency:
+  group: mcp-registry-publish
+  cancel-in-progress: false
+
+env:
+  SERVER_NAME: com.findabis/findabis
+  CARD_URL: https://findabis.com/.well-known/mcp/server.json
+  PROBE_URL: https://findabis.com/api/mcp
+  REGISTRY_URL: https://registry.modelcontextprotocol.io
+  # The publisher release to install; bump it together with the card's $schema (src/app/.well-known/mcp/server.json)
+  MCP_PUBLISHER_VERSION: v1.8.7
+
+jobs:
+  publish:
+    name: Publish ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the version this repo carries
+        id: version
+        run: |
+          set -euo pipefail
+          v=$(jq -r .version server.json)
+          for f in plugin.json gemini-extension.json; do
+            fv=$(jq -r .version "$f")
+            [ "$fv" = "$v" ] || { echo "::error::$f says $fv but server.json says $v — run scripts/release.sh"; exit 1; }
+          done
+          code=$(sed -n "s/^export const MCP_SERVER_VERSION = '\(.*\)';/\1/p" src/server/mcp/registry.ts)
+          [ "$code" = "$v" ] || { echo "::error::src/server/mcp/registry.ts says $code but server.json says $v — run scripts/release.sh"; exit 1; }
+          case "$GITHUB_REF" in
+            refs/tags/*) [ "$GITHUB_REF" = "refs/tags/v$v" ] || { echo "::error::tag ${GITHUB_REF#refs/tags/} does not match version $v"; exit 1; } ;;
+          esac
+          grep -Eq "^## $v([^0-9.]|$)" CHANGELOG.md || echo "::warning::CHANGELOG.md has no '## $v' section; the release notes will point at the file"
+          echo "version=$v" >> "$GITHUB_OUTPUT"
+          echo "Releasing $v"
+
+      - name: Wait until findabis.com serves it
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          WAIT: ${{ github.event.inputs.wait_minutes || '30' }}
+        run: |
+          set -uo pipefail
+          tries=$(( WAIT * 2 ))
+          for i in $(seq 1 "$tries"); do
+            card=$(curl -fsS -m 20 "$CARD_URL" | jq -r .version 2>/dev/null || echo '?')
+            probe=$(curl -fsS -m 20 -H 'Accept: application/json' "$PROBE_URL" | jq -r .version 2>/dev/null || echo '?')
+            if [ "$card" = "$VERSION" ] && [ "$probe" = "$VERSION" ]; then
+              echo "Live: server card $card, GET probe $probe"
+              exit 0
+            fi
+            echo "Live card $card, probe $probe — waiting for $VERSION ($i/$tries)"
+            sleep 30
+          done
+          echo "::error::findabis.com still serves $card after $WAIT minutes. Deploy the app (yarn deploy), then re-run this workflow."
+          exit 1
+
+      - name: Is this version in the registry already?
+        id: registry
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -uo pipefail
+          # By name, not ?search=: the search endpoint has hung for 90 s where this answers in one
+          listed=$(curl -fsS -m 60 "$REGISTRY_URL/v0/servers/${SERVER_NAME//\//%2F}/versions" | jq -r '.servers[].server.version' 2>/dev/null | tr '\n' ' ' || true)
+          echo "Registry has: ${listed:-nothing, or it did not answer in time}"
+          if [[ " $listed " == *" $VERSION "* ]]; then
+            echo "already=true" >> "$GITHUB_OUTPUT"
+            echo "Version $VERSION is already listed; nothing to publish."
+          else
+            echo "already=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install mcp-publisher
+        if: steps.registry.outputs.already == 'false'
+        run: |
+          set -euo pipefail
+          curl -fsSL -o mcp-publisher.tgz \
+            "https://github.com/modelcontextprotocol/registry/releases/download/${MCP_PUBLISHER_VERSION}/mcp-publisher_linux_amd64.tar.gz"
+          tar -xzf mcp-publisher.tgz mcp-publisher
+          sudo install -m 0755 mcp-publisher /usr/local/bin/mcp-publisher
+          mcp-publisher --help >/dev/null
+
+      - name: Publish the live server card
+        if: steps.registry.outputs.already == 'false'
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          MCP_REGISTRY_PRIVATE_KEY: ${{ secrets.MCP_REGISTRY_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          if [ -z "$MCP_REGISTRY_PRIVATE_KEY" ]; then
+            echo "::error::Add the repository secret MCP_REGISTRY_PRIVATE_KEY (the namespace key; see RELEASING.md), then re-run."
+            exit 1
+          fi
+          work=$(mktemp -d)
+          cd "$work"
+          # What production serves, not the repo copy: the registry can never describe a card findabis.com does not
+          curl -fsS -m 30 "$CARD_URL" -o server.json
+          [ "$(jq -r .version server.json)" = "$VERSION" ] || { echo "::error::live card changed under us"; exit 1; }
+          [ "$(jq -r .name server.json)" = "$SERVER_NAME" ] || { echo "::error::live card names $(jq -r .name server.json)"; exit 1; }
+          mcp-publisher login http --domain findabis.com --private-key "$MCP_REGISTRY_PRIVATE_KEY" >/dev/null
+          mcp-publisher publish
+          echo "Published $SERVER_NAME $VERSION"
+
+      - name: Confirm the registry lists it
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -uo pipefail
+          for i in 1 2 3 4 5 6; do
+            listed=$(curl -fsS -m 60 "$REGISTRY_URL/v0/servers/${SERVER_NAME//\//%2F}/versions" | jq -r '.servers[].server.version' 2>/dev/null | tr '\n' ' ' || true)
+            if [[ " $listed " == *" $VERSION "* ]]; then echo "Registry lists: $listed"; exit 0; fi
+            echo "Registry lists: ${listed:-nothing yet} — waiting ($i/6)"
+            sleep 20
+          done
+          echo "::error::the registry does not list $VERSION yet; check https://registry.modelcontextprotocol.io/v0/servers?search=$SERVER_NAME"
+          exit 1
+
+      - name: GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          if gh release view "v$VERSION" >/dev/null 2>&1; then
+            echo "Release v$VERSION already exists"
+            exit 0
+          fi
+          # The CHANGELOG section for this version, heading excluded
+          awk -v v="$VERSION" '
+            $0 ~ "^## " v "([^0-9.]|$)" { on = 1; next }
+            /^## / { if (on) exit }
+            on { print }
+          ' CHANGELOG.md | sed -e :a -e '/^\n*$/{$d;N;ba' -e '}' > notes.md
+          [ -s notes.md ] || echo "See CHANGELOG.md." > notes.md
+          gh release create "v$VERSION" --title "v$VERSION" --notes-file notes.md --verify-tag
+          echo "Created release v$VERSION"
