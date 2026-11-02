@@ -18,6 +18,9 @@ Versions match the `version` the server reports in its handshake and on its
 - The server's `instructions` now end with a short routing guide: which tool answers which question, that slugs come
   from the find tools, that lists cap at 25, that nothing is ordered by sponsorship, and that the guides exist.
 - `llms.txt` and the GET probe count tools, guides and prompts from the code (`llms.txt` still said seven).
+- README: diagrams for how it works, connecting Claude, which tool answers what, an example answer and what the
+  server can and can't see (dark and light, drawn by `scripts/make-docs-images.py`); a "check it's working" step; a
+  troubleshooting table; ChatGPT, GitHub Copilot and Windsurf steps to match findabis.com/mcp.
 
 ## 0.4.0 — 2026-10
 
