@@ -63,7 +63,15 @@ claude mcp add --transport http findabis https://findabis.com/api/mcp
 
 ### Cursor
 
-[Add to Cursor](https://cursor.com/en/install-mcp?name=findabis&config=eyJ1cmwiOiJodHRwczovL2ZpbmRhYmlzLmNvbS9hcGkvbWNwIn0=) — one click. Or install it as a plugin: this repo follows the [Agent Plugins](https://agent-plugins.org) standard (`plugin.json` + `mcp.json`).
+<a href="https://cursor.com/install-mcp?name=findabis&config=eyJ1cmwiOiJodHRwczovL2ZpbmRhYmlzLmNvbS9hcGkvbWNwIn0="><picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://cursor.com/deeplink/mcp-install-dark.svg">
+  <img alt="Add Findabis to Cursor" src="https://cursor.com/deeplink/mcp-install-light.svg" height="32">
+</picture></a>
+
+One click: it opens Cursor and adds a server named **findabis** with the URL above. Cursor needs to be installed on the machine you click from. Or paste the config from the section below.
+
+> [!NOTE]
+> Use this button rather than the one on cursor.directory for now. That listing installs the server under the name `server` and passes it a `type` field from the plugin manifest that Cursor's own config doesn't use.
 
 ### Gemini CLI
 
