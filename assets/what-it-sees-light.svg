@@ -8,24 +8,25 @@
 <text x="96" y="131" font-size="18" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">It sees</text>
 <text x="96" y="152" font-size="12.5" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">what anyone can read on findabis.com</text>
 <text x="80" y="188" font-size="15" fill="#01c7a4" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✓</text>
-<text x="104" y="188" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Clinics and pharmacies: fees, consultation types, delivery, CQC</text>
-<text x="104" y="209" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">and GPhC records, FAQs, opening hours</text>
-<text x="80" y="243" font-size="15" fill="#01c7a4" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✓</text>
-<text x="104" y="243" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Products: dose form, THC and CBD, contents and allergens,</text>
-<text x="104" y="264" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">leaflets, the latest published UK price</text>
-<text x="80" y="298" font-size="15" fill="#01c7a4" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✓</text>
-<text x="104" y="298" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Strains and brands, and the directory’s counts and fee ranges</text>
+<text x="104" y="188" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Clinics and pharmacies: fees, consultation types, delivery,</text>
+<text x="104" y="210" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">CQC and GPhC records, FAQs, opening hours</text>
+<text x="80" y="244" font-size="15" fill="#01c7a4" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✓</text>
+<text x="104" y="244" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Products: dose form, THC and CBD, contents and allergens,</text>
+<text x="104" y="266" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">leaflets, the latest published UK price</text>
+<text x="80" y="300" font-size="15" fill="#01c7a4" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✓</text>
+<text x="104" y="300" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Strains and brands, and the directory’s counts and fee</text>
+<text x="104" y="322" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">ranges</text>
 <circle cx="684" cy="126" r="7" fill="#d6452a"/>
 <text x="700" y="131" font-size="18" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">It never sees or does</text>
 <text x="700" y="152" font-size="12.5" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">no account, no key, no writes</text>
 <text x="684" y="188" font-size="15" fill="#d6452a" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✗</text>
-<text x="708" y="188" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Accounts, patients, prescriptions or any personal data</text>
+<text x="708" y="188" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Accounts, patients, prescriptions or any personal data</text>
 <text x="684" y="222" font-size="15" fill="#d6452a" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✗</text>
-<text x="708" y="222" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Stock, which pharmacy holds what, or per-pharmacy prices</text>
+<text x="708" y="222" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Stock, which pharmacy holds what, or per-pharmacy prices</text>
 <text x="684" y="256" font-size="15" fill="#d6452a" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✗</text>
-<text x="708" y="256" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Booking, buying, changing or sending anything</text>
+<text x="708" y="256" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Booking, buying, changing or sending anything</text>
 <text x="684" y="290" font-size="15" fill="#d6452a" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✗</text>
-<text x="708" y="290" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Ranking by sponsorship — results come by distance, name, fee or</text>
-<text x="708" y="311" font-size="14.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">rating</text>
+<text x="708" y="290" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Ranking by sponsorship — results come by distance, name, fee</text>
+<text x="708" y="312" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">or rating</text>
 <text x="640" y="404" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Read-only · 60 requests a minute per client · the medical disclaimer is sent to every session</text>
 </svg>

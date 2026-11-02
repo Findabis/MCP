@@ -43,13 +43,13 @@
 <rect x="48" y="344" width="1184" height="206" rx="16" fill="#eaf0ed" fill-opacity="1"/>
 <text x="72" y="372" font-size="11" fill="#4a5451" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" letter-spacing="1.5">AN EXAMPLE EXCHANGE</text>
 <text x="72" y="404" font-size="10.5" fill="#4a5451" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" letter-spacing="1.2">YOU</text>
-<text x="284" y="404" font-size="15" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">“Which clinics near Leeds do video consultations, and what’s the first appointment?”</text>
+<text x="284" y="404" font-size="16" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">“Which clinics near Leeds do video consultations, and what’s the first appointment?”</text>
 <text x="72" y="438" font-size="10.5" fill="#4a5451" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" letter-spacing="1.2">ASSISTANT → FINDABIS</text>
-<text x="284" y="438" font-size="15" fill="#0a6b5e" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">find_clinics({ near: "Leeds", consultationType: "ONLINE" })</text>
+<text x="284" y="438" font-size="16" fill="#0a6b5e" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">find_clinics({ near: "Leeds", consultationType: "ONLINE" })</text>
 <text x="72" y="472" font-size="10.5" fill="#4a5451" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" letter-spacing="1.2">FINDABIS → ASSISTANT</text>
-<text x="284" y="472" font-size="15" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Clinics nearest first — miles, first-consultation fee, consultation types and a page link for each</text>
+<text x="284" y="472" font-size="16" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Clinics nearest first — miles, first-consultation fee, consultation types and a page link for each</text>
 <text x="72" y="506" font-size="10.5" fill="#4a5451" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" letter-spacing="1.2">ASSISTANT</text>
-<text x="284" y="506" font-size="15" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">“Clinics near Leeds that consult by video, nearest first…” with a link for each, and a reminder that only a</text>
-<text x="284" y="527" font-size="15" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">specialist can prescribe</text>
+<text x="284" y="506" font-size="16" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">“Clinics near Leeds that consult by video, nearest first…” with a link for each, and a reminder that only a</text>
+<text x="284" y="528" font-size="16" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">specialist can prescribe</text>
 <text x="48" y="582" font-size="13.5" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">MCP is an open standard. Your assistant never sends your chat to Findabis — only the tool call, the same request the website itself makes.</text>
 </svg>

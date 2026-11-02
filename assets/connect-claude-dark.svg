@@ -48,18 +48,19 @@
 <text x="768" y="528.5" font-size="13" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">3</text>
 <circle cx="841" cy="131" r="13" fill="#01c7a4"/>
 <text x="841" y="135.5" font-size="13" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">1</text>
-<text x="868" y="136" font-size="15" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Open Settings → Connectors.</text>
+<text x="868" y="136" font-size="16" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Open Settings → Connectors.</text>
 <circle cx="841" cy="179" r="13" fill="#01c7a4"/>
 <text x="841" y="183.5" font-size="13" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">2</text>
-<text x="868" y="184" font-size="15" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Choose Add custom connector.</text>
+<text x="868" y="184" font-size="16" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Choose Add custom connector.</text>
 <circle cx="841" cy="227" r="13" fill="#01c7a4"/>
 <text x="841" y="231.5" font-size="13" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">3</text>
-<text x="868" y="232" font-size="15" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Name it Findabis, paste</text>
-<text x="868" y="253" font-size="15" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">https://findabis.com/api/mcp and press Add.</text>
-<circle cx="841" cy="296" r="13" fill="#01c7a4"/>
-<text x="841" y="300.5" font-size="13" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">4</text>
-<text x="868" y="301" font-size="15" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">In a new chat, open the tools menu, turn</text>
-<text x="868" y="322" font-size="15" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Findabis on, and ask your question.</text>
+<text x="868" y="232" font-size="16" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Name it Findabis, paste</text>
+<text x="868" y="254" font-size="16" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">https://findabis.com/api/mcp and press</text>
+<text x="868" y="276" font-size="16" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Add.</text>
+<circle cx="841" cy="319" r="13" fill="#01c7a4"/>
+<text x="841" y="323.5" font-size="13" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">4</text>
+<text x="868" y="324" font-size="16" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">In a new chat, open the tools menu, turn</text>
+<text x="868" y="346" font-size="16" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Findabis on, and ask your question.</text>
 <rect x="828" y="436" width="404" height="180" rx="12" fill="#000000" fill-opacity="0.35"/>
 <text x="848" y="462" font-size="11" fill="#a3aaa7" text-anchor="start" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" letter-spacing="1.5">ELSEWHERE</text>
 <text x="848" y="488" font-size="14" fill="#ffffff" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">ChatGPT: Settings → Apps &amp; Connectors → Advanced</text>
