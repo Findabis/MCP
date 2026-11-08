@@ -19,7 +19,7 @@ export type McpScope = 'public' | 'entity:read' | 'entity:write' | 'agent';
  * at /.well-known/mcp/server.json — three places that must never disagree.
  * A bump means a re-publish to the registry (docs/MCP_PLAN.md, the end).
  */
-export const MCP_SERVER_VERSION = '0.5.0';
+export const MCP_SERVER_VERSION = '0.6.0';
 
 export type McpTool = {
     name: string;
@@ -54,6 +54,11 @@ export type McpCallContext = {
     /** Entity the credential is scoped to, for the entity namespace. Null for public callers. */
     entity: { entityType: string; entityId: string } | null;
     headers: Headers;
+    /**
+     * The country the listings are for (ISO alpha-2). Never set by an outside caller, whose tools answer for the UK;
+     * Abis sets its member's country, or the one they asked about (services/abis/market.ts)
+     */
+    countryCode?: string;
 };
 
 /**

@@ -27,7 +27,7 @@ export function pageUrl(kind: ListingKind, slug: string | null | undefined): str
 /** A site path or an already-absolute CDN URL (images, documents), as an absolute URL */
 export const siteUrl = (path: string | null | undefined): string | null => (path ? absoluteUrl(path) : null);
 
-/** A Findabis article (the blog's guides), absolute — `search_findabis` returns these beside the directory kinds */
+/** A Findabis article (the blog's guides), absolute — `search_directory`, `find_articles` and `get_article` link these */
 export const articleUrl = (slug: string | null | undefined): string | null => {
     const clean = slug?.trim();
     return clean ? absoluteUrl(`/blog/${encodeURIComponent(clean)}`) : null;

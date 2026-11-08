@@ -113,13 +113,13 @@ const SECTIONS: Section[] = [
 ];
 
 const NEXT =
-    '\nNext: get_listing kind=<kind> slug=<slug> for a clinic, pharmacy, strain or brand in full; get_product slug=<slug> for a product.';
+    '\nNext: get_<kind> slug=<slug> for one in full (get_clinic, get_pharmacy, get_product, get_strain, get_brand, get_article).';
 
 const line = (r: Row) =>
     `  ${r.name}${r.slug ? ` [slug: ${r.slug}]` : ''}${r.summary ? ` — ${r.summary}` : ''}${r.url ? `\n    ${r.url}` : ''}`;
 
 export const searchAll: PublicMcpTool = {
-    ...toolCopy('search_findabis'),
+    ...toolCopy('search_directory'),
     inputSchema: {
         query: z.string().min(2).max(120).describe('What to look for: a name, brand, strain, town or postcode.'),
         limit: z.number().int().min(1).max(20).optional().describe('Most results per kind, 1-20. Default 8.'),
@@ -128,7 +128,11 @@ export const searchAll: PublicMcpTool = {
     scopes: ['public'],
     handler: async ({ query, limit = 8 }, ctx) => {
         const api = await publicCaller(ctx);
-        const res: Record<string, unknown> = await api.search.globalSearch({ query, limit, countryCode: 'GB' });
+        const res: Record<string, unknown> = await api.search.globalSearch({
+            query,
+            limit,
+            countryCode: ctx.countryCode ?? 'GB',
+        });
         const results: Row[] = SECTIONS.flatMap((section) => {
             const cards = res[section.key];
             return (Array.isArray(cards) ? (cards as Card[]) : []).slice(0, limit).map((card) => ({

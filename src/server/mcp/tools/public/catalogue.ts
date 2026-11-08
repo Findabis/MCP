@@ -82,7 +82,7 @@ export const findProducts: PublicMcpTool = {
                 sort,
                 page,
                 perPage,
-                countryCode: 'GB',
+                countryCode: ctx.countryCode ?? 'GB',
             }),
         );
         const results = res.items.map(toProductRow);

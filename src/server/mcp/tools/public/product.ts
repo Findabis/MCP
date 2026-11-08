@@ -70,7 +70,7 @@ export const getProduct: PublicMcpTool = {
             .string()
             .min(1)
             .max(200)
-            .describe('The product page slug from find_products or search_findabis, e.g. "demo-kush-t20-c1".'),
+            .describe('The product page slug from find_products or search_directory, e.g. "demo-kush-t20-c1".'),
     },
     outputSchema: productOutput,
     scopes: ['public'],

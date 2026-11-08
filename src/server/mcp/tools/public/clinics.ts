@@ -13,9 +13,10 @@ import {
     radiusInput,
     sites,
     WIDE_PAGE,
+    windowNote,
 } from './nearby';
 import { clinicListOutput, patientTypeEnum } from './outputs';
-import { limitInput, offsetInput } from './paging';
+import { limitInput, offsetInput, pageInput } from './paging';
 import { excludesPatientType, type PatientType } from './patientTypes';
 import { toolCopy } from './summary';
 
@@ -72,6 +73,7 @@ export const findClinics: PublicMcpTool = {
             ),
         limit: limitInput,
         offset: offsetInput,
+        page: pageInput,
     },
     outputSchema: clinicListOutput,
     scopes: ['public'],
@@ -80,14 +82,16 @@ export const findClinics: PublicMcpTool = {
         const patientType = input.patientType as PatientType | undefined;
         const limit = input.limit ?? 10;
         const offset = input.offset ?? 0;
+        const page = input.page ?? 1;
         const sort = input.sort ?? (near ? 'distance' : 'az');
         const condition = matchCondition(input.condition);
         const api = await publicCaller(ctx);
         const res: any = await api.clinic.getPagedClinics({
             sort: sort === 'za' ? 'za' : 'az',
             search: query?.trim() || undefined,
-            countryCode: 'GB',
+            countryCode: ctx.countryCode ?? 'GB',
             perPage: WIDE_PAGE,
+            page,
             ...(near ? { near, radius: radiusMiles } : {}),
             ...(cqc ? { cqcFilter: cqc } : {}),
             ...(condition ? { condition } : {}),
@@ -112,9 +116,7 @@ export const findClinics: PublicMcpTool = {
             input.condition && !condition
                 ? `"${input.condition}" is not a condition clinics publish; ignored. Use one of the listed values.`
                 : null,
-            Number(res.total ?? 0) > WIDE_PAGE
-                ? `Filters read the first ${WIDE_PAGE} of ${res.total} clinics; add \`near\` or \`query\`.`
-                : null,
+            windowNote(Number(res.total ?? 0), page, 'clinics'),
             results.some((r) => r.firstYearClinicFees != null)
                 ? 'Year-one figures are clinic fees only, never medicine.'
                 : null,
@@ -128,14 +130,20 @@ export const findClinics: PublicMcpTool = {
                   filters: [condition, consultationType, cqc, maxFirstConsultationFee, acceptingPatients, patientType],
               });
         const text =
-            pastWideRead(offset, rows.length, Number(res.total ?? 0)) ??
+            pastWideRead(offset, rows.length, Number(res.total ?? 0), page) ??
             summarise(results.map(clinicLine), rows.length, hint, offset);
         const next = results.length
-            ? '\nNext: get_listing kind=clinic slug=… for one in full, or compare_providers for side by side.'
+            ? '\nNext: get_clinic slug=… for one in full, or compare_providers for side by side.'
             : '';
         return {
             text: `${text}${note ? `\n${note}` : ''}${next}`,
-            structured: { results, total: rows.length, ...(note ? { note } : {}) },
+            structured: {
+                results,
+                total: rows.length,
+                directoryTotal: Number(res.total ?? rows.length),
+                page,
+                ...(note ? { note } : {}),
+            },
         };
     },
 };

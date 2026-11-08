@@ -54,7 +54,7 @@ export const findBrands: PublicMcpTool = {
         const results = res.items.map(toBrandRow);
         const text = summarise(results.map(brandLine), res.total, 'Narrow with `query` or `category`.', offset);
         const next = results.length
-            ? '\nNext: get_listing kind=brand slug=… for one brand, or find_products query=<brand> for its products.'
+            ? '\nNext: get_brand slug=… for one brand, or find_products query=<brand> for its products.'
             : '';
         return { text: `${text}${next}`, structured: { results, total: res.total } };
     },

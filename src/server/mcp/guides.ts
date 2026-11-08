@@ -56,7 +56,7 @@ No law sets a list of conditions or a number of treatments. Each clinic sets its
 
 ## What each clinic publishes
 
-Clinics on Findabis state whom they take: new patients, transfers from another clinic, patients already under treatment, and any age limits. The get_listing tool (kind "clinic") and each clinic page show these.
+Clinics on Findabis state whom they take: new patients, transfers from another clinic, patients already under treatment, and any age limits. The get_clinic tool and each clinic page show these.
 
 The Findabis eligibility questions (${BASE_URL}/eligibility-test) show which clinics may look further. They are not an assessment, and this guide cannot assess anyone.
 

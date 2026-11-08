@@ -42,7 +42,7 @@ export function productFactsPrompt(product: string): string {
     return [
         `Describe the cannabis-based medicine "${product}" from the Findabis directory, factually.`,
         '',
-        `1. Call search_findabis with query "${product}" and take the product match (kind "product"). If several products match, list them with their page URLs and ask which one; if none does, say Findabis does not list it.`,
+        `1. Call search_directory with query "${product}" and take the product match (kind "product"). If several products match, list them with their page URLs and ask which one; if none does, say Findabis does not list it.`,
         '2. Call get_product with its slug.',
         '3. Report what it returns: brand, dose form, THC and CBD, strain and genetics, terpenes, what it contains (carrier oil, allergens, capsule shell), the published price range if there is one, leaflets, and the page URL. Quote figures exactly as returned, and say that stock and per-pharmacy prices are shown only to patients and professionals with access.',
         '4. Describe, never recommend: do not say what the product is for, whom it suits or how it compares medically. Say that a specialist prescriber decides what, if anything, a person is prescribed, and that possession without a prescription is an offence in the UK.',
@@ -53,8 +53,8 @@ export function checkProviderPrompt(name: string): string {
     return [
         `Check whether "${name}" is a medical cannabis clinic or pharmacy listed on Findabis, and what its public record says.`,
         '',
-        `1. Call search_findabis with query "${name}". If no clinic or pharmacy matches, say that Findabis does not list it — that is all the directory can say, not a judgement on the provider.`,
-        '2. Call get_listing with the kind and slug of the match.',
+        `1. Call search_directory with query "${name}". If no clinic or pharmacy matches, say that Findabis does not list it — that is all the directory can say, not a judgement on the provider.`,
+        '2. Call get_clinic or get_pharmacy with the slug of the match.',
         '3. For a clinic: the CQC rating, CQC registration and report link, address and opening hours, consultation types, published fees, which patient types its policy takes, and partner pharmacies. For a pharmacy: the GPhC registration number, last inspection outcome and report link, address and opening hours, delivery and collection, and partner clinics.',
         '4. Give the Findabis page URL and, where returned, the regulator link, so the person can check the register themselves. Say that Findabis is a directory, not a regulator, and does not give medical advice.',
     ].join('\n');

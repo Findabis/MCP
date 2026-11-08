@@ -8,7 +8,7 @@ import { clinicRow, linkRow, pharmacyRow } from './outputs';
 import { toPharmacyRow } from './pharmacies';
 
 /**
- * `get_listing`'s typed answer: the facts the public page shows, built field
+ * The typed answer of `get_clinic`, `get_pharmacy`, `get_strain` and `get_brand`: the facts the public page shows, built field
  * by field from the page procedure's shape. Never a stock figure, a listing
  * count, a per-pharmacy medicine price, staff names or a phone or email.
  */

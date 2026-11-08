@@ -20,6 +20,17 @@ export const offsetInput = z
     .optional()
     .describe('Skip this many results, for the next page (the answer says which offset comes next). Default 0.');
 
+/** The clinic and pharmacy tools read the directory a window of 60 rows at a time: `page` moves it, `offset` pages inside it */
+export const pageInput = z
+    .number()
+    .int()
+    .min(1)
+    .max(50)
+    .optional()
+    .describe(
+        'Which window of 60 directory rows to read; `offset` pages inside it. Default 1. The answer says when a later window exists.',
+    );
+
 /**
  * The public list procedures clamp `perPage` (products and brands to 12-60),
  * so asking for `limit` rows at page `offset / limit` lands on the wrong rows.

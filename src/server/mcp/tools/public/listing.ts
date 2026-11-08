@@ -38,7 +38,7 @@ export const slugInput = z
     .max(200)
     .regex(/^[a-z0-9][a-z0-9-]*$/i, 'A page slug: letters, digits and hyphens')
     .refine((value) => !UUID.test(value), 'Pass the page slug, not an id')
-    .describe('The page slug from a find_* tool or search_findabis, e.g. "green-leaf-clinic".');
+    .describe('The page slug from a find_* tool or search_directory, e.g. "green-leaf-clinic".');
 
 /** The page's own procedure for each kind — what the public page itself renders */
 async function load(api: Api, kind: Kind, slug: string): Promise<any> {
@@ -166,23 +166,45 @@ function render(o: ListingOutput): string {
     return lines.filter(Boolean).join('\n');
 }
 
-export const getListing: PublicMcpTool = {
-    ...toolCopy('get_listing'),
-    inputSchema: {
-        kind: z.enum(KINDS).describe('What the slug names: clinic, pharmacy, strain or brand.'),
-        slug: slugInput,
-    },
-    outputSchema: listingOutput,
-    scopes: ['public'],
-    handler: async ({ kind, slug }: { kind: Kind; slug: string }, ctx) => {
-        const api = await publicCaller(ctx);
-        const row = await load(api, kind, slug);
-        if (!row || !carriesSlug(kind, row, slug)) {
-            throw new McpToolError(`No ${kind} with slug "${slug}". Use search_findabis to find the slug.`);
-        }
-        // The row id is a key for the page's FAQs and nothing more: it never reaches the answer
-        const faqs = await faqsOf(api, kind, row.id);
-        const structured = { ...SHAPE[kind]({ ...row, slug: typeof row.slug === 'string' ? row.slug : slug }), faqs };
-        return { text: render(structured), structured };
-    },
+/** Where a slug for each kind comes from, for the not-found message */
+const FINDER: Record<Kind, string> = {
+    clinic: 'find_clinics',
+    pharmacy: 'find_pharmacies',
+    strain: 'find_strains',
+    brand: 'find_brands',
 };
+
+/**
+ * One getter per kind, as `get_product` is for products: a model picks
+ * `get_clinic` from the name alone, where a `kind` argument was one more
+ * thing to get right. All four share the page procedures and the shape above.
+ */
+function listingTool(kind: Kind): PublicMcpTool {
+    return {
+        ...toolCopy(`get_${kind}`),
+        inputSchema: { slug: slugInput },
+        outputSchema: listingOutput,
+        scopes: ['public'],
+        handler: async ({ slug }: { slug: string }, ctx) => {
+            const api = await publicCaller(ctx);
+            const row = await load(api, kind, slug);
+            if (!row || !carriesSlug(kind, row, slug)) {
+                throw new McpToolError(
+                    `No ${kind} with slug "${slug}". Use ${FINDER[kind]} or search_directory to find the slug.`,
+                );
+            }
+            // The row id is a key for the page's FAQs and nothing more: it never reaches the answer
+            const faqs = await faqsOf(api, kind, row.id);
+            const structured = {
+                ...SHAPE[kind]({ ...row, slug: typeof row.slug === 'string' ? row.slug : slug }),
+                faqs,
+            };
+            return { text: render(structured), structured };
+        },
+    };
+}
+
+export const getClinic = listingTool('clinic');
+export const getPharmacy = listingTool('pharmacy');
+export const getStrain = listingTool('strain');
+export const getBrand = listingTool('brand');

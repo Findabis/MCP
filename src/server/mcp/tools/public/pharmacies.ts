@@ -4,9 +4,9 @@ import type { PublicMcpTool } from '@/server/mcp/registry';
 import { summarise } from '@/server/mcp/registry';
 import { publicCaller } from './caller';
 import { place, ratingOf, stars, str } from './clinicRow';
-import { nearInput, nearNote, pastWideRead, radiusInput, sites, WIDE_PAGE } from './nearby';
+import { nearInput, nearNote, pastWideRead, radiusInput, sites, WIDE_PAGE, windowNote } from './nearby';
 import { pharmacyListOutput, type pharmacyRow } from './outputs';
-import { limitInput, offsetInput } from './paging';
+import { limitInput, offsetInput, pageInput } from './paging';
 import { toolCopy } from './summary';
 
 type PharmacyRow = z.infer<typeof pharmacyRow>;
@@ -46,19 +46,21 @@ export const findPharmacies: PublicMcpTool = {
             .describe('distance (default with `near`), az (default otherwise), za, city, rating.'),
         limit: limitInput,
         offset: offsetInput,
+        page: pageInput,
     },
     outputSchema: pharmacyListOutput,
     scopes: ['public'],
     handler: async (
-        { query, near, radiusMiles, delivers, collection, minRating, sort, limit = 10, offset = 0 },
+        { query, near, radiusMiles, delivers, collection, minRating, sort, limit = 10, offset = 0, page = 1 },
         ctx,
     ) => {
         const order = sort ?? (near ? 'distance' : 'az');
         const api = await publicCaller(ctx);
         const res: any = await api.pharmacy.getPagedPharmacies({
             search: query?.trim() || undefined,
-            countryCode: 'GB',
+            countryCode: ctx.countryCode ?? 'GB',
             perPage: WIDE_PAGE,
+            page,
             sort: order === 'za' || order === 'city' ? order : 'az',
             ...(near ? { near, radius: radiusMiles } : {}),
             ...(delivers ? { hasDelivery: true } : {}),
@@ -70,12 +72,7 @@ export const findPharmacies: PublicMcpTool = {
         if (order === 'rating') rows = [...rows].sort((a, b) => (b.rating?.average ?? 0) - (a.rating?.average ?? 0));
         const results = rows.slice(offset, offset + limit);
         const note =
-            [
-                nearNote(near, res.near),
-                Number(res.total ?? 0) > WIDE_PAGE
-                    ? `Filters read the first ${WIDE_PAGE} of ${res.total}; add \`near\` or \`query\`.`
-                    : null,
-            ]
+            [nearNote(near, res.near), windowNote(Number(res.total ?? 0), page, 'pharmacies')]
                 .filter(Boolean)
                 .join(' ') || undefined;
         const hint = results.length
@@ -83,15 +80,19 @@ export const findPharmacies: PublicMcpTool = {
             : near && radiusMiles
               ? `Try a wider \`radiusMiles\`, or \`delivers: true\` without \`near\`.`
               : 'Drop a filter, or try `delivers: true` without `near`.';
-        const next = results.length
-            ? '\nNext: get_listing kind=pharmacy slug=… for delivery prices, or compare_providers.'
-            : '';
+        const next = results.length ? '\nNext: get_pharmacy slug=… for delivery prices, or compare_providers.' : '';
         const listed =
-            pastWideRead(offset, rows.length, Number(res.total ?? 0)) ??
+            pastWideRead(offset, rows.length, Number(res.total ?? 0), page) ??
             summarise(results.map(pharmacyLine), rows.length, hint, offset);
         return {
             text: `${listed}${note ? `\n${note}` : ''}${next}`,
-            structured: { results, total: rows.length, ...(note ? { note } : {}) },
+            structured: {
+                results,
+                total: rows.length,
+                directoryTotal: Number(res.total ?? rows.length),
+                page,
+                ...(note ? { note } : {}),
+            },
         };
     },
 };

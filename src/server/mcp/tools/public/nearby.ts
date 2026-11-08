@@ -75,8 +75,21 @@ export function noMatchHint({
  * These tools page inside the WIDE_PAGE rows they read. Past those, `summarise`'s "no more matches: N in all" would be
  * false when the directory holds more, so say where paging stops (the read-cap note says how to reach the rest).
  */
-export function pastWideRead(offset: number, read: number, total: number): string | null {
-    return offset > 0 && offset >= read && total > WIDE_PAGE
-        ? `No more in the ${read} read; \`offset\` cannot page past them.`
-        : null;
+export function pastWideRead(offset: number, read: number, total: number, page = 1): string | null {
+    if (!(offset > 0 && offset >= read && total > WIDE_PAGE)) return null;
+    return page * WIDE_PAGE < total
+        ? `No more in the ${read} read; \`page: ${page + 1}\` reads the next window of ${total}.`
+        : `No more in the ${read} read; that was the last window of ${total}.`;
+}
+
+/**
+ * The read-cap note: which WIDE_PAGE-row window of `total` this answer read, and how to reach the rest. Abis's
+ * directory tool reads every window this way — Specials Pharma, 81st of 87 pharmacies A to Z, sat past the first.
+ */
+export function windowNote(total: number, page: number, what: string): string | null {
+    if (total <= WIDE_PAGE) return null;
+    const to = Math.min(page * WIDE_PAGE, total);
+    const read = page === 1 ? `the first ${WIDE_PAGE}` : `rows ${(page - 1) * WIDE_PAGE + 1}-${to}`;
+    const more = to < total ? `\`page: ${page + 1}\` reads the next ${Math.min(WIDE_PAGE, total - to)}, or add` : 'add';
+    return `Filters read ${read} of ${total} ${what}; ${more} \`near\` or \`query\`.`;
 }

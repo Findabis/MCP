@@ -23,6 +23,8 @@ const rating = z
 const list = <T extends z.ZodTypeAny>(row: T) => ({
     results: z.array(row),
     total: z.number().int().describe('How many matched in all; narrow the query when this exceeds the results'),
+    directoryTotal: z.number().int().optional().describe('The whole directory, when the tool read one window of it'),
+    page: z.number().int().optional().describe('Which window of 60 directory rows this answer read'),
     note: z.string().optional(),
 });
 
