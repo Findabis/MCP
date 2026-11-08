@@ -188,6 +188,21 @@ The list tools return up to 25 at a time; pass `offset` for the next page (each 
 
 There are also three prompts, which show up as slash-commands in Claude Desktop, Claude Code and Cursor: `find_care_near` (a town or postcode), `product_facts` (a product name) and `check_provider` (a clinic or pharmacy name). And three guides the assistant can read: how to get a prescription in the UK, who clinics take, and what Findabis is.
 
+### Agent skills
+
+Six [Agent Skills](https://agentskills.io) in [`skills/`](skills/) teach an assistant which tool to call, how to chain them and what it must not say:
+
+| Skill | For |
+| --- | --- |
+| [`findabis`](skills/findabis/SKILL.md) | Any UK medical cannabis question: picks the tool and sets the answering rules |
+| [`find-a-clinic`](skills/find-a-clinic/SKILL.md) | Clinics near a place, online clinics, fees and year-one cost compared |
+| [`find-a-pharmacy`](skills/find-a-pharmacy/SKILL.md) | Where to fill a prescription, delivery prices, collection |
+| [`check-a-provider`](skills/check-a-provider/SKILL.md) | Is a clinic or pharmacy listed and registered (CQC / GPhC) |
+| [`medicine-lookup`](skills/medicine-lookup/SKILL.md) | What a product contains, strain genetics, what a brand makes |
+| [`uk-directory-facts`](skills/uk-directory-facts/SKILL.md) | Live, dated figures to cite |
+
+In Claude Code, copy a folder into `~/.claude/skills/`; in Claude.ai, upload it under Settings → Capabilities → Skills.
+
 ## What it can and can't see
 
 <picture>
