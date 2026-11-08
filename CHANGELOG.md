@@ -3,6 +3,15 @@
 Versions match the `version` the server reports in its handshake and on its
 [registry card](https://findabis.com/.well-known/mcp/server.json).
 
+## 0.6.0 — 2026-11
+
+- One `find_` and one `get_` tool per kind. `get_listing` is replaced by `get_clinic`, `get_pharmacy`, `get_strain`
+  and `get_brand`; each takes just the page `slug`.
+- `search_findabis` is renamed `search_directory`.
+- New `find_articles` and `get_article`: Findabis's published articles by topic or category, and the text of one
+  (plain text, shortened past 6,000 characters, with its page link). A members-only article returns its link only.
+- Breaking: clients that saved the old tool names should re-list tools.
+
 ## 0.5.0 — 2026-11
 
 - `search_findabis` answers "what is X" in one call: every hit carries a one-line summary (town, consultation types
