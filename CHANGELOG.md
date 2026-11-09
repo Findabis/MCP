@@ -10,6 +10,8 @@ Versions match the `version` the server reports in its handshake and on its
 - `search_findabis` is renamed `search_directory`.
 - New `find_articles` and `get_article`: Findabis's published articles by topic or category, and the text of one
   (plain text, shortened past 6,000 characters, with its page link). A members-only article returns its link only.
+- Leaner definitions: every tool description is one or two sentences with an `Example:` call, parameter
+  descriptions are a few words, and the shared rules (no stock, no per-pharmacy prices) sit once in the instructions.
 - Breaking: clients that saved the old tool names should re-list tools.
 
 ## 0.5.0 — 2026-11
