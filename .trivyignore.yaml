@@ -1,0 +1,5 @@
+# Accepted Trivy findings for this repo (Findabis docs/TRIVY_SECURITY_SCAN_PLAN.md) — none. An entry needs an id, the
+# paths it covers, a statement saying why it is safe and an expired_at date (Trivy reports it again after that date).
+misconfigurations: []
+vulnerabilities: []
+secrets: []

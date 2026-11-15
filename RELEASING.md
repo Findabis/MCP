@@ -9,7 +9,7 @@ one workflow keep the four in step.
 
 The registry accepts a new version of `com.findabis/findabis` only from whoever holds the Ed25519 key behind
 [`findabis.com/.well-known/mcp-registry-auth`](https://findabis.com/.well-known/mcp-registry-auth). The same hex
-key that `yarn mcp:publish` reads from `~/.config/findabis-mcp/private-key.hex` goes into a repository secret:
+key that `pnpm mcp:publish` reads from `~/.config/findabis-mcp/private-key.hex` goes into a repository secret:
 
 ```bash
 gh secret set MCP_REGISTRY_PRIVATE_KEY -R Findabis/MCP < ~/.config/findabis-mcp/private-key.hex
@@ -27,7 +27,7 @@ gh secret set MCP_REGISTRY_PRIVATE_KEY -R Findabis/MCP < ~/.config/findabis-mcp/
    the three manifests, insists on a `## X.Y.Z` section in `CHANGELOG.md` (it writes a stub and stops if there is
    none), then commits `Release vX.Y.Z`, tags `vX.Y.Z` and pushes. `--dry-run` shows the plan and touches nothing.
 
-2. **Deploy the app.** Commit the `registry.ts` bump there and run `yarn deploy`. Before or after step 1, either order
+2. **Deploy the app.** Commit the `registry.ts` bump there and run `pnpm run deploy`. Before or after step 1, either order
    works.
 
 3. **Let the workflow finish.** The tag starts [`publish.yml`](.github/workflows/publish.yml), which waits up to
@@ -52,5 +52,5 @@ gh secret set MCP_REGISTRY_PRIVATE_KEY -R Findabis/MCP < ~/.config/findabis-mcp/
 
 ## Fallback
 
-`yarn mcp:publish` in the app does the registry step by hand with the local key, after `yarn deploy`; then
+`pnpm mcp:publish` in the app does the registry step by hand with the local key, after `pnpm run deploy`; then
 `gh release create vX.Y.Z -R Findabis/MCP --notes "See CHANGELOG.md"`.

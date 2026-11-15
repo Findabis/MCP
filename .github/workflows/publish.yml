@@ -74,7 +74,7 @@ jobs:
             echo "Live card $card, probe $probe — waiting for $VERSION ($i/$tries)"
             sleep 30
           done
-          echo "::error::findabis.com still serves $card after $WAIT minutes. Deploy the app (yarn deploy), then re-run this workflow."
+          echo "::error::findabis.com still serves $card after $WAIT minutes. Deploy the app (pnpm run deploy), then re-run this workflow."
           exit 1
 
       - name: Is this version in the registry already?

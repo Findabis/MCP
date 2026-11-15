@@ -13,7 +13,7 @@
 # the GitHub release. Deploy the app before or after running this; the workflow waits up to 30 minutes.
 #
 # A bump edits src/server/mcp/registry.ts in the app and runs the app's MCP tests. Committing and deploying the app
-# (yarn deploy) stays with you. Needs git and python3, and the app checkout (default ../Findabis, or FINDABIS_APP).
+# (pnpm run deploy) stays with you. Needs git and python3, and the app checkout (default ../Findabis, or FINDABIS_APP).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
@@ -67,7 +67,7 @@ p.write_text(s2)
 PY
         echo "App: MCP_SERVER_VERSION set to $next in $REG (commit it with the app and deploy)"
         echo "App: running the MCP tests…"
-        (cd "$APP" && yarn jest src/server/mcp >/dev/null 2>&1) || fail "the app's MCP tests fail after the bump — see yarn jest src/server/mcp"
+        (cd "$APP" && pnpm jest src/server/mcp >/dev/null 2>&1) || fail "the app's MCP tests fail after the bump — see pnpm jest src/server/mcp"
         echo "App: MCP tests pass"
     fi
 fi
@@ -126,8 +126,8 @@ else
     echo "Not pushed (--no-push). When ready: git push origin main --follow-tags"
 fi
 if [ "$next" != "$current" ]; then
-    echo "Still yours in the app: commit src/server/mcp/registry.ts, then yarn deploy. The workflow publishes once"
+    echo "Still yours in the app: commit src/server/mcp/registry.ts, then pnpm run deploy. The workflow publishes once"
     echo "the live card says $next (it waits 30 minutes; after that, re-run it: gh workflow run publish.yml -R Findabis/MCP)."
 else
-    echo "If the app is not deployed yet: yarn deploy. The workflow waits 30 minutes for the live card to say $next."
+    echo "If the app is not deployed yet: pnpm run deploy. The workflow waits 30 minutes for the live card to say $next."
 fi
