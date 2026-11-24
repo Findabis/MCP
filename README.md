@@ -9,7 +9,7 @@
 <br/>
 
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.findabis%2Ffindabis-01c7a4?style=flat-square&labelColor=090909)](https://registry.modelcontextprotocol.io/)
-[![Read only](https://img.shields.io/badge/tools-17_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
+[![Read only](https://img.shields.io/badge/tools-23_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
 [![No login](https://img.shields.io/badge/login-not_needed-01c7a4?style=flat-square&labelColor=090909)](#what-it-can-and-cant-see)
 [![Licence](https://img.shields.io/badge/licence-MIT-01c7a4?style=flat-square&labelColor=090909)](LICENSE)
 
@@ -19,7 +19,7 @@
 
 [Findabis](https://findabis.com) is a directory of UK medical cannabis clinics, pharmacies and products.
 
-This MCP server lets AI assistants like Claude, ChatGPT and Gemini look things up in it directly, so answers about clinics, prices and products come from current data rather than guesswork.
+This MCP server lets AI assistants like Claude, ChatGPT and Gemini look things up in it directly, so answers about clinics, prices, products, suppliers and travel rules come from current data rather than guesswork.
 
 It's hosted, so there's nothing to install or run.
 
@@ -151,6 +151,21 @@ Your assistant should call `get_directory_facts` and answer with counts, a fee r
 
 Every answer links to the Findabis page it came from, so you can check a figure yourself. The server also reminds the assistant, on every connection, that Findabis is a directory and not medical advice.
 
+## New in 0.7.0
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/new-in-0-7-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/new-in-0-7-light.svg">
+  <img alt="New in 0.7.0, six cards. Travelling abroad: a country's checked rule with its sources and date (get_travel_rules). Cited explainers: nine common questions, each with sources (explain_topic). Suppliers and creators (find_suppliers, get_supplier, find_creators, get_creator). Strains by the numbers: THC and CBD range, terpenes and flavours (find_strains). Attach a listing by its address, findabis://clinic/{slug}. One search across every kind, suppliers and creators included (search_directory)." src="assets/new-in-0-7-light.svg" width="100%">
+</picture>
+
+- **Travel rules.** `get_travel_rules` gives a country's rule from the Findabis travel guide: what to carry, whether a permit is needed, the official sources and the date someone last checked them, plus the UK's own rules for leaving and coming back. General information, not legal advice.
+- **Cited explainers.** `explain_topic` covers how prescribing works, what a specialist checks, records to bring, costs, driving, work and drug tests, changing clinic or pharmacy, shortages and complaints. Each comes with its official sources and a review date.
+- **Suppliers and creators.** `find_suppliers` and `get_supplier` cover the cultivators, importers, manufacturers and distributors behind UK products. `find_creators` and `get_creator` cover the people making videos and guides. Creators are never reviewed or ranked.
+- **Strain filters.** `find_strains` now takes THC and CBD ranges, terpenes, flavours and "has products". There is still never an effect or a use.
+- **Attach a listing.** Clients that support resource templates can attach `findabis://clinic/{slug}`, or a pharmacy, product, strain, brand, supplier or creator, as context without a tool call.
+- **One search.** `search_directory` now finds suppliers and creators too.
+
 ## Things you can ask
 
 - *"What's Blue Dream, and what does Findabis list for it?"*
@@ -160,16 +175,19 @@ Every answer links to the Findabis page it came from, so you can check a figure 
 - *"Find me pharmacies near SW1A that deliver."*
 - *"How many clinics are on Findabis, and what does a first consultation typically cost?"*
 - *"Is this pharmacy registered, and what did its last GPhC inspection say?"*
+- *"I'm going to Spain with my prescription. What does the Findabis travel guide say, and when was it checked?"*
+- *"What's the law on driving with a prescribed cannabis medicine?"*
+- *"Which UK companies import medical cannabis, and which brands do they supply?"*
 
 ## The tools
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/pick-a-tool-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/pick-a-tool-light.svg">
-  <img alt="The 17 tools as cards, each with the question it answers and what it returns: find_clinics, get_clinic, find_pharmacies, get_pharmacy, find_products, get_product, find_strains, get_strain, find_brands, get_brand, find_articles, get_article, find_provider_articles, get_provider_article, compare_providers, search_directory and get_directory_facts. Below them, the three prompts and the three guides." src="assets/pick-a-tool-light.svg" width="100%">
+  <img alt="The 23 tools as cards, each with the question it answers and what it returns: find_clinics, get_clinic, find_pharmacies, get_pharmacy, find_products, get_product, find_strains, get_strain, find_brands, get_brand, find_suppliers, get_supplier, find_creators, get_creator, find_articles, get_article, find_provider_articles, get_provider_article, compare_providers, search_directory, get_directory_facts, get_travel_rules and explain_topic, the six added in 0.7.0 marked New. Below them, the three prompts, the three guides and the listing addresses." src="assets/pick-a-tool-light.svg" width="100%">
 </picture>
 
-There are 17, and they all just read:
+There are 23, and they all just read:
 
 | Tool | What it's for |
 |---|---|
@@ -179,21 +197,29 @@ There are 17, and they all just read:
 | `get_pharmacy` | One pharmacy in full: address, hours, delivery options and prices, GPhC record, partner clinics, FAQs |
 | `find_products` | Products by name, brand, strain or form, with THC/CBD and the latest published UK price |
 | `get_product` | Everything public about one product: strength, terpenes, ingredients, allergens, leaflets |
-| `find_strains` | Strain profiles by name or genetics |
+| `find_strains` | Strain profiles by name or genetics, THC and CBD range, terpenes and flavours; never effects or uses |
 | `get_strain` | One strain in full: genetics, cannabinoid ranges, terpenes, flavours, lineage, products made from it |
 | `find_brands` | The brands behind UK products, by name or dose form, with how many products each lists |
 | `get_brand` | One brand in full: location, website, its listed products and FAQs |
+| `find_suppliers` | The cultivators, importers, manufacturers, packagers and distributors behind UK products, by role or country, with product counts |
+| `get_supplier` | One supplier in full: roles, location, website, the brands and products it supplies, FAQs. Never stock or wholesale prices |
+| `find_creators` | Content creators on Findabis by name, country or platform, A–Z. Creators are never reviewed or ranked |
+| `get_creator` | One creator's page: where they're based, their channels, recent videos, shop link and FAQs. Never contact details |
 | `find_articles` | Findabis's own articles on UK law, prescriptions, clinics and products, by words or category, newest first |
 | `get_article` | One Findabis article as plain text, with byline, dates and page link |
 | `find_provider_articles` | Articles that clinics and pharmacies publish on their own websites (the MCP programme), each naming the business and linking its page to cite |
 | `get_provider_article` | One of those articles as plain text; the business's view, not Findabis's |
 | `compare_providers` | Two to six clinics or pharmacies side by side |
-| `search_directory` | One search across clinics, pharmacies, products, strains, brands and articles, when you're not sure what you're looking for; every hit comes with its kind, slug, page link and a one-line summary |
+| `search_directory` | One search across clinics, pharmacies, products, strains, brands, suppliers, creators and articles, when you're not sure what you're looking for; every hit comes with its kind, slug, page link and a one-line summary |
 | `get_directory_facts` | How many clinics, pharmacies, products, strains and brands are listed, the spread of first-consultation fees, how many pharmacies deliver |
+| `get_travel_rules` | Taking a UK prescription abroad: a country's checked rule (what to carry, any permit, official sources, the date checked) and nearby countries, or every country with one status, plus the UK's own rules. General information, not legal advice |
+| `explain_topic` | Cited explainers: how prescribing works, what a specialist checks, records to bring, costs, driving, work and drug tests, changing clinic or pharmacy, shortages, complaints |
 
 The `find_` tools return up to 25 at a time; pass `offset` for the next page (each answer says where it starts).
 
 There are also three prompts, which show up as slash-commands in Claude Desktop, Claude Code and Cursor: `find_care_near` (a town or postcode), `product_facts` (a product name) and `check_provider` (a clinic or pharmacy name). And three guides the assistant can read: how to get a prescription in the UK, who clinics take, and what Findabis is.
+
+Listings can also be attached by address, in clients that support resource templates: `findabis://clinic/{slug}`, and the same for `pharmacy`, `product`, `strain`, `brand`, `supplier` and `creator`. Each reads exactly what the matching `get_` tool returns.
 
 ### Agent skills
 
@@ -215,13 +241,42 @@ In Claude Code, copy a folder into `~/.claude/skills/`; in Claude.ai, upload it 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/what-it-sees-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/what-it-sees-light.svg">
-  <img alt="Two lists. It sees: public clinic, pharmacy, product, strain and brand listings, and the directory's counts and fee ranges. It never sees or does: accounts, patients or personal data; stock, stockists or per-pharmacy prices; booking, buying or sending anything; ranking by sponsorship." src="assets/what-it-sees-light.svg" width="100%">
+  <img alt="Two lists. It sees: public clinic, pharmacy, product, strain, brand, supplier and creator listings, the travel guide, cited explainers, and the directory's counts. It never sees or does: accounts, patients or personal data; stock, stockists or per-pharmacy prices; booking, buying or sending anything; ranking by sponsorship." src="assets/what-it-sees-light.svg" width="100%">
 </picture>
 
-- It only sees what's already public on findabis.com. No accounts, no patients, no personal data — ever.
+- It only sees public information: what's already on findabis.com, plus short explainers that cite their official sources. No accounts, no patients, no personal data — ever.
 - It can't book, buy, change or send anything.
 - It doesn't share stock levels, which pharmacy holds what, or per-pharmacy medicine prices. Those stay with patients and professionals who are signed in.
 - Please be gentle with it: 60 requests a minute per client is plenty for normal use. Bulk-copying the directory isn't allowed under the [Findabis Terms](https://findabis.com/policies/terms).
+
+## Findabis for Business (private beta)
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/business-connect-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="assets/business-connect-light.svg">
+  <img alt="Findabis for Business, in private beta. Five steps: add the business server to your assistant, sign in to Findabis, pick your business, confirm it's you with a fresh 2FA code or passkey, then your business's own tools. Tools per kind of business: clinics 12, pharmacies 13, brands 11, suppliers and cultivators 9, creators 10. Patients first: no patient's or customer's details in any answer; no prescriptions, consultation notes, dispensing or payments; only your organisation's work AI account. Patient and prescription work stays inside Findabis, with Finny." src="assets/business-connect-light.svg" width="100%">
+</picture>
+
+A second, separate server is for the people who run a business on Findabis: a clinic, pharmacy, brand, supplier or creator. A team member connects their organisation's AI assistant to **their own business**. They get that business's tools, limited to what their role may do. It's in a private beta with a few businesses.
+
+1. Add `https://findabis.com/api/mcp/business` to your assistant. In Claude, use **Settings → Connectors → Add custom connector**. In Claude Code, run `claude mcp add --transport http findabis-business https://findabis.com/api/mcp/business`, then `/mcp` → **Authenticate**.
+2. Sign in to Findabis with your own account and pick your business, if you work at more than one.
+3. Confirm it's you with a fresh 2FA code or a passkey. Tick *"I'm connecting my organisation's work AI account."* and press **Allow**. No API key changes hands.
+
+| Business | Tools | Highlights |
+|---|---|---|
+| Clinic | 12 | Your overview and performance, "how AI assistants see you", your schedule with no patient named, reviews and replies, patient questions and answers, listing text and hours, blog and FAQ drafts, a ticket to Findabis |
+| Pharmacy | 13 | The clinic set where it fits, plus the order queue with no patient named, and your stock |
+| Brand | 11 | Your products and who stocks them; new products and edits sent to Findabis to review |
+| Supplier or cultivator | 9 | Stock by batch, your wholesale orders, your licence status |
+| Creator | 10 | Which videos link to which products, finding products to link, linking one |
+
+Changes need the business admin's **Allow changes** switch and the person's tick when they connect. Blog posts and FAQs are saved as drafts, review replies and answers go to moderation, and listing text and opening hours change straight away. A business's admins switch it on in **Settings → AI assistants**. They see every connection and what it did, and can stop any of them. Each person sees their own connections under **Account → Security**.
+
+> [!IMPORTANT]
+> **Business data only.** No answer ever contains a patient's or a customer's details. The server can't see or change patients, prescriptions, consultation notes, dispensing, controlled drugs or payments: that work stays inside Findabis, with Finny. Use your organisation's work AI account, never a personal one.
+
+Its code isn't in this repo: it lives inside the Findabis app with the rest of the business workspace.
 
 ## The important bit
 
@@ -258,7 +313,9 @@ It runs inside the Findabis app and uses the app's own database and helpers, so 
 | [`src/server/mcp/publicServer.ts`](src/server/mcp/publicServer.ts) | Registers the tools with their read-only hints, the guides and the prompts |
 | [`src/server/mcp/prompts.ts`](src/server/mcp/prompts.ts) | The three prompts and what each asks the assistant to do |
 | [`src/server/mcp/instructions.ts`](src/server/mcp/instructions.ts) | The tool-routing guide every session gets after the disclaimer |
-| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The 17 tools and the shape of what they return |
+| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The 23 tools and the shape of what they return |
+| [`src/server/mcp/templates.ts`](src/server/mcp/templates.ts) | The listing addresses (`findabis://clinic/{slug}` and the rest), each read through its `get_` tool |
+| [`src/server/mcp/knowledge/`](src/server/mcp/knowledge) | The explainers `explain_topic` serves, with their sources |
 | [`src/server/mcp/disclaimer.ts`](src/server/mcp/disclaimer.ts) | The medical disclaimer every session gets |
 
 The diagrams in this README are SVG files in [`assets/`](assets), generated by [`scripts/make-docs-images.py`](scripts/make-docs-images.py) so they can be redrawn when the tools change. The assistant marks are their owners', used only to name the products that connect.

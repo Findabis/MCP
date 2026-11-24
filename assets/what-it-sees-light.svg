@@ -6,7 +6,7 @@
 <rect x="652" y="92" width="580" height="276" rx="16" fill="#ffffff" fill-opacity="1" stroke="#d6dcd9" stroke-width="1" stroke-opacity="1"/>
 <circle cx="80" cy="126" r="7" fill="#01c7a4"/>
 <text x="96" y="131" font-size="18" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">It sees</text>
-<text x="96" y="152" font-size="12.5" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">what anyone can read on findabis.com</text>
+<text x="96" y="152" font-size="12.5" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">public information only: findabis.com’s listings and travel guide, and cited explainers</text>
 <text x="80" y="188" font-size="15" fill="#01c7a4" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✓</text>
 <text x="104" y="188" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Clinics and pharmacies: fees, consultation types, delivery,</text>
 <text x="104" y="210" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">CQC and GPhC records, FAQs, opening hours</text>
@@ -14,8 +14,8 @@
 <text x="104" y="244" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Products: dose form, THC and CBD, contents and allergens,</text>
 <text x="104" y="266" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">leaflets, the latest published UK price</text>
 <text x="80" y="300" font-size="15" fill="#01c7a4" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">✓</text>
-<text x="104" y="300" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Strains and brands, and the directory’s counts and fee</text>
-<text x="104" y="322" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">ranges</text>
+<text x="104" y="300" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Strains, brands, suppliers and creators, the travel guide,</text>
+<text x="104" y="322" font-size="15.5" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">cited explainers, and the directory’s counts</text>
 <circle cx="684" cy="126" r="7" fill="#d6452a"/>
 <text x="700" y="131" font-size="18" fill="#090909" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">It never sees or does</text>
 <text x="700" y="152" font-size="12.5" fill="#4a5451" text-anchor="start" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">no account, no key, no writes</text>

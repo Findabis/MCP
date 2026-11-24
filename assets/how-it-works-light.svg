@@ -21,13 +21,13 @@
 <rect x="680" y="136" width="236" height="176" rx="16" fill="#ffffff" fill-opacity="1" stroke="#d6dcd9" stroke-width="1" stroke-opacity="1"/>
 <use href="#mcp" xlink:href="#mcp" x="777.0" y="161" width="42" height="42" fill="#090909"/>
 <text x="798.0" y="236" font-size="19" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">Findabis MCP</text>
-<text x="798.0" y="262" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">findabis.com/api/mcp · 17</text>
+<text x="798.0" y="262" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">findabis.com/api/mcp · 23</text>
 <text x="798.0" y="281" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">read-only tools · no login</text>
 <rect x="996" y="136" width="236" height="176" rx="16" fill="#ffffff" fill-opacity="1" stroke="#d6dcd9" stroke-width="1" stroke-opacity="1"/>
 <use href="#fb" xlink:href="#fb" x="1093.0" y="161" width="42" height="42" fill="#01c7a4"/>
 <text x="1114.0" y="236" font-size="19" fill="#090909" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">Live directory</text>
-<text x="1114.0" y="262" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Clinics, pharmacies,</text>
-<text x="1114.0" y="281" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">products, strains and brands</text>
+<text x="1114.0" y="262" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">Listings, the travel guide</text>
+<text x="1114.0" y="281" font-size="14" fill="#4a5451" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">and cited explainers</text>
 <line x1="292" y1="202" x2="356" y2="202" stroke="#090909" stroke-width="1.8" stroke-opacity="0.25" marker-end="url(#arr)"/>
 <text x="324.0" y="192" font-size="11.5" fill="#4a5451" text-anchor="middle" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace">question</text>
 <line x1="356" y1="240" x2="292" y2="240" stroke="#01c7a4" stroke-width="1.8" stroke-dasharray="5 5" marker-end="url(#arrT)"/>

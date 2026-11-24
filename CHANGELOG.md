@@ -5,15 +5,20 @@ Versions match the `version` the server reports in its handshake and on its
 
 ## 0.7.0 — 2026-11 (draft: the owner signs the copy before `scripts/release.sh`)
 
-- New `find_suppliers` and `get_supplier`: licensed cultivators, manufacturers and distributors — roles, location,
-  brands and product count, in name order (never by sponsorship). No stock or wholesale prices.
+- New `find_suppliers` and `get_supplier`: the cultivators, manufacturers and distributors listed on Findabis — roles,
+  location, brands and product count, in name order (never by sponsorship). No stock or wholesale prices.
 - New `find_creators` and `get_creator`: creators listed on Findabis — channels, recent videos and their shop link.
   Creators are never reviewed or rated, and their videos are not linked to medicines.
 - New `get_travel_rules`: one country's checked rule for travelling with prescribed cannabis, with its sources and
   review date and nearby countries, or every country with one status. Not legal advice.
 - New `explain_topic`: short, sourced explainers (prescribing, specialist checks, costs, driving, work and drug
   tests, switching, shortages, complaints…). Describes how things work; never advises anyone personally.
-- `find_strains` takes THC and CBD ranges, terpenes, flavours and "has products".
+- New `find_provider_articles` and `get_provider_article`: articles clinics and pharmacies publish on their own
+  Findabis pages (first published in this release).
+- `find_strains` takes THC and CBD ranges, terpenes, flavours and "has products". No strain or product carries
+  effects, uses or side effects, and the instructions now say never to infer them.
+- `get_travel_rules` understands the usual spellings of country names (St Lucia, Côte d'Ivoire, Korea, Burma…) and
+  suggests the closest checked names when one is not found.
 - Resource templates `findabis://{clinic,pharmacy,product,strain,brand,supplier,creator}/{slug}`, and a lighter tool
   list: each `get_` tool now advertises only its own output shape.
 

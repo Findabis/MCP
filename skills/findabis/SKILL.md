@@ -22,7 +22,7 @@ The server is hosted. Nothing to install, no API key, no sign-in. Add it as a re
 { "mcpServers": { "findabis": { "url": "https://findabis.com/api/mcp" } } }
 ```
 
-Transport is streamable HTTP. All 17 tools are read-only (`readOnlyHint: true`) and returns public data only.
+Transport is streamable HTTP. All 23 tools are read-only (`readOnlyHint: true`) and return public data only.
 
 ## Pick the tool
 
@@ -35,6 +35,10 @@ Transport is streamable HTTP. All 17 tools are read-only (`readOnlyHint: true`) 
 | A named medicine ("what's in X?") | `find_products` or `search_directory` | `get_product` with the slug |
 | A strain name, Indica / Sativa / Hybrid | `find_strains` | `get_strain` for terpenes and lineage |
 | A brand or maker | `find_brands` | `get_brand`, or `find_products` with the brand name as `query` |
+| Who grows, imports or distributes products | `find_suppliers` (`type`, `country`) | `get_supplier` for its brands and products |
+| A content creator, or "who makes videos about this?" | `find_creators` | `get_creator`; creators are never reviewed, so never rank them |
+| Taking a prescription abroad | `get_travel_rules` with the country | Quote the rule with its sources and the date checked; it is not legal advice |
+| How prescribing works, records, costs, driving, work and drug tests, changing clinic or pharmacy, shortages, complaints | `explain_topic` with the topic | Quote it with its sources rather than answering from memory |
 | "How many clinics are there?", "what does a first consultation usually cost?" | `get_directory_facts` | — |
 | Background on the law, prescriptions or the market | `find_articles` | `get_article` to read one, quoted with its page URL |
 | What a clinic or pharmacy says on its own website (how it works, what to expect, news) | `find_provider_articles` | `get_provider_article`; name the business and cite the page on its own site, as its view, not Findabis's |

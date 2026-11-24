@@ -164,8 +164,8 @@ def how_it_works(theme):
     nodes = [
         ('you', 'You', 'Ask a question in plain English'),
         ('assistant', 'Your assistant', 'Picks a Findabis tool and calls it'),
-        ('mcp', 'Findabis MCP', 'findabis.com/api/mcp · 17 read-only tools · no login'),
-        ('data', 'Live directory', 'Clinics, pharmacies, products, strains and brands'),
+        ('mcp', 'Findabis MCP', 'findabis.com/api/mcp · 23 read-only tools · no login'),
+        ('data', 'Live directory', 'Listings, the travel guide and cited explainers'),
     ]
     xs, y, w, h = [48, 364, 680, 996], 136, 236, 176
     for i, (key, name, text) in enumerate(nodes):
@@ -293,34 +293,47 @@ TOOLS = [
     ('get_pharmacy', '“Tell me about this pharmacy.”', 'Delivery options and prices, GPhC record, partner clinics, FAQs, opening hours'),
     ('find_products', '“Which oils does this brand list?”', 'Dose form, THC and CBD, and the latest published UK price'),
     ('get_product', '“What’s in this oil — carrier, allergens, strength?”', 'Terpenes, contents, leaflets, FAQs and the public price range'),
-    ('find_strains', '“Is Blue Dream an indica or a sativa?”', 'Genetics and THC/CBD ranges — never effects or uses'),
+    ('find_strains', '“Which strains are over 20% THC with myrcene?”', 'Genetics and THC/CBD, by range, terpenes or flavours — never effects or uses'),
     ('get_strain', '“What’s the lineage of Gelato?”', 'Cannabinoid ranges, terpenes, flavours, lineage, products made from it'),
     ('find_brands', '“Who makes capsules for the UK market?”', 'Brands by name or dose form, with how many products each lists'),
     ('get_brand', '“Tell me about this brand.”', 'Location, website, its listed products and FAQs'),
-    ('find_articles', '“What does Findabis say about travelling abroad?”', 'Findabis articles on UK law, prescriptions, clinics and products, newest first'),
+    ('find_suppliers', '“Which companies import medical cannabis to the UK?”', 'Cultivators, importers and distributors by role or country, with product counts'),
+    ('get_supplier', '“Tell me about this supplier.”', 'Its roles, location, website, brands and products, FAQs — never stock or prices'),
+    ('find_creators', '“Who makes videos about medical cannabis?”', 'Creators by name, country or platform, A–Z — never reviewed or ranked'),
+    ('get_creator', '“What does this creator post?”', 'Channels, recent videos, shop link and FAQs — never contact details'),
+    ('find_articles', '“What does Findabis say about prescriptions?”', 'Findabis articles on UK law, prescriptions, clinics and products, newest first'),
     ('get_article', '“Read me that article.”', 'The article as plain text, with byline, dates and page link'),
     ('find_provider_articles', '“What does a clinic say about a first consultation?”', 'Articles clinics and pharmacies publish on their own sites, to cite'),
     ('get_provider_article', '“Read me that clinic’s article.”', 'The article as plain text, with the business and the page on its own site'),
     ('compare_providers', '“Which of these three is cheapest in year one?”', 'Two to six clinics or pharmacies side by side, services only'),
-    ('search_directory', '“What’s Tilray?”', 'Anything by name: kind, slug, page link and a one-line summary'),
+    ('search_directory', '“What’s Tilray?”', 'Anything by name, suppliers and creators too: kind, page link, one-line summary'),
     ('get_directory_facts', '“How many clinics are listed, and what’s a typical first fee?”', 'Counts, fee range and median, delivery counts, last-updated dates'),
+    ('get_travel_rules', '“Can I take my prescription to Spain?”', 'The checked rule: what to carry, any permit, official sources, date checked'),
+    ('explain_topic', '“What’s the law on driving with a prescription?”', 'A cited explainer with its sources and review date — information, never advice'),
 ]
+NEW_TOOLS = {'find_suppliers', 'get_supplier', 'find_creators', 'get_creator', 'get_travel_rules', 'explain_topic'}
 
 
 def pick_a_tool(theme):
     t = THEMES[theme]
-    s = Svg(t, 1380, 'The 17 Findabis tools, each with the question it answers and what it returns')
+    rows = (len(TOOLS) + 1) // 2
+    h = 120 + rows * 128 + 96
+    s = Svg(t, h, f'The {len(TOOLS)} Findabis tools, each with the question it answers and what it returns; the six added in 0.7.0 are marked New')
     title(s, 48, 60, 'Which tool answers what', 'Your assistant chooses these itself. This is what each one is for, and what it gives back.', 28)
-    w, h = 580, 120
+    w, ch = 580, 116
     for i, (name, q, r) in enumerate(TOOLS):
         x = 48 if i % 2 == 0 else 652
-        y = 120 + (i // 2) * 132
-        s.card(x, y, w, h, 14)
-        s.text(x + 22, y + 36, name, 17, t['teal_text'], bold=True, mono=True)
-        s.text(x + 22, y + 65, q, 16)
-        s.para(x + 22, y + 92, r, 15, w - 44, lh=19, fill=t['muted'])
-    s.text(48, 1338, 'Also three prompts, shown as slash-commands: find_care_near · product_facts · check_provider', 14, t['muted'])
-    s.text(48, 1360, 'And three guides the assistant can read: how to get a prescription in the UK · who clinics take · about Findabis and its data', 14, t['muted'])
+        y = 120 + (i // 2) * 128
+        s.card(x, y, w, ch, 14)
+        s.text(x + 22, y + 34, name, 17, t['teal_text'], bold=True, mono=True)
+        if name in NEW_TOOLS:
+            s.chip(x + w - 74, y + 16, 'New', 11)
+        s.text(x + 22, y + 62, q, 16)
+        s.para(x + 22, y + 88, r, 15, w - 44, lh=19, fill=t['muted'])
+    fy = 120 + rows * 128 + 18
+    s.text(48, fy, 'Also three prompts, shown as slash-commands: find_care_near · product_facts · check_provider', 14, t['muted'])
+    s.text(48, fy + 22, 'Three guides the assistant can read: how to get a prescription in the UK · who clinics take · about Findabis and its data', 14, t['muted'])
+    s.text(48, fy + 44, 'And listings it can attach by address: findabis://clinic/{slug} — and pharmacy, product, strain, brand, supplier, creator', 14, t['muted'], mono=False)
     return s
 
 
@@ -368,10 +381,10 @@ def what_it_sees(theme):
     s.card(652, 92, 580, 276, 16)
     s.add(f'<circle cx="80" cy="126" r="7" fill="{t["teal"]}"/>')
     s.text(96, 131, 'It sees', 18, bold=True)
-    s.text(96, 152, 'what anyone can read on findabis.com', 12.5, t['muted'])
+    s.text(96, 152, 'public information only: findabis.com’s listings and travel guide, and cited explainers', 12.5, t['muted'])
     sees = ['Clinics and pharmacies: fees, consultation types, delivery, CQC and GPhC records, FAQs, opening hours',
             'Products: dose form, THC and CBD, contents and allergens, leaflets, the latest published UK price',
-            'Strains and brands, and the directory’s counts and fee ranges']
+            'Strains, brands, suppliers and creators, the travel guide, cited explainers, and the directory’s counts']
     yy = 188
     for item in sees:
         s.text(80, yy, '✓', 15, t['teal'], bold=True)
@@ -393,8 +406,160 @@ def what_it_sees(theme):
     return s
 
 
+# ---------------------------------------------------------------- 6. new in 0.7
+WHATS_NEW = [
+    ('travel', 'Travelling abroad', 'A country’s checked rule from the Findabis travel guide: what to carry, any permit, the official sources and the date checked.', 'get_travel_rules'),
+    ('explain', 'Cited explainers', 'Nine questions people ask most, from how prescribing works to driving, work and complaints, each with its sources and date.', 'explain_topic'),
+    ('makers', 'Suppliers and creators', 'The cultivators, importers and distributors behind UK products, and the creators making videos. Never reviewed or ranked.', 'find_suppliers · get_supplier · find_creators · get_creator'),
+    ('filters', 'Strains by the numbers', 'Filter strains by THC and CBD range, terpenes, flavours, or only those a listed product is made from. Never by effects.', 'find_strains'),
+    ('templates', 'Attach a listing', 'Assistants that support resource templates attach a page to the chat by its address, without a tool call.', 'findabis://clinic/{slug} · and six more kinds'),
+    ('search', 'One search, every kind', 'The directory search now finds suppliers and creators too, each with its page and a one-line summary.', 'search_directory'),
+]
+
+
+def new_drawing(s, kind, px, py, pw):
+    t = s.t
+    s.panel(px, py, pw, 112, 10)
+    if kind == 'travel':
+        s.add(f'<circle cx="{px + 24}" cy="{py + 28}" r="9" fill="{t["chip"]}" fill-opacity="{t["chip_o"] + .2}"/>')
+        s.skeleton(px + 42, py + 21, 96)
+        s.chip(px + 152, py + 15, 'Permit first', 11)
+        s.skeleton(px + 16, py + 52, pw - 32, 10)
+        s.skeleton(px + 16, py + 70, pw - 112, 10)
+        s.text(px + 16, py + 100, 'Checked · 2 official sources', 11, t['muted'], mono=True)
+    elif kind == 'explain':
+        cx, cy = px + 14, py + 14
+        for label in ['How prescribing works', 'Driving', 'Work and drug tests', 'Complaints', '+5']:
+            cw = width_of(label, 11, False, True) + 20
+            if cx + cw > px + pw - 12:
+                cx, cy = px + 14, cy + 30
+            s.chip(cx, cy, label, 11)
+            cx += cw + 6
+        s.text(px + 16, py + 100, 'legislation.gov.uk · NICE · MHRA · CQC', 11, t['muted'], mono=True)
+    elif kind == 'makers':
+        half = (pw - 36) / 2
+        for i, (chip, note) in enumerate([('cultivator', '3 products'), ('YouTube · Kick', 'never ranked')]):
+            bx = px + 12 + i * (half + 12)
+            s.rect(bx, py + 12, half, 88, 8, t['card'], t['card_o'], t['stroke'], t['stroke_o'])
+            s.skeleton(bx + 12, py + 24, half - 60)
+            s.chip(bx + 12, py + 46, chip, 11)
+            s.text(bx + 12, py + 88, note, 11, t['muted'], mono=True)
+    elif kind == 'filters':
+        s.text(px + 16, py + 26, 'THC 15–30%', 11, t['muted'], mono=True)
+        s.rect(px + 16, py + 38, pw - 32, 8, 4, t['skel'], t['skel_o'])
+        s.rect(px + 16 + (pw - 32) * .15, py + 38, (pw - 32) * .15, 8, 4, t['teal'])
+        cx = px + 16
+        for label in ['myrcene', 'limonene', 'has products']:
+            cx += s.chip(cx, py + 62, label, 11) + 6
+    elif kind == 'templates':
+        s.text(px + 16, py + 30, 'findabis://clinic/{slug}', 13, t['teal_text'], bold=True, mono=True)
+        s.arrow(px + 40, py + 42, px + 40, py + 70, teal=True)
+        s.rect(px + 60, py + 62, pw - 80, 38, 10, t['bubble'], t['bubble_o'])
+        s.text(px + 76, py + 86, 'Attached to the chat as context', 12, t['muted'])
+    else:
+        s.rect(px + 16, py + 12, pw - 32, 24, 6, t['input'], t['input_o'], t['stroke'], t['stroke_o'])
+        s.text(px + 28, py + 28, 'Search the directory…', 11.5, t['muted'], mono=True)
+        for i, kind_name in enumerate(['clinic', 'supplier', 'creator']):
+            yy = py + 46 + i * 22
+            w = s.chip(px + 16, yy, kind_name, 10)
+            s.skeleton(px + 28 + w, yy + 5, 110, 10)
+
+
+def new_in_07(theme):
+    t = THEMES[theme]
+    s = Svg(t, 752, 'New in 0.7.0: travel rules, cited explainers, suppliers and creators, strain filters, listings to attach by address, and one search across every kind')
+    title(s, 48, 60, 'New in 0.7.0', 'Six additions to the public server. Still read-only, still no login, still only what findabis.com shows.', 28)
+    w, h = 376, 280
+    for i, (kind, name, text, tools) in enumerate(WHATS_NEW):
+        x = 48 + (i % 3) * (w + 28)
+        y = 116 + (i // 3) * 300
+        s.card(x, y, w, h, 14)
+        new_drawing(s, kind, x + 20, y + 20, w - 40)
+        s.text(x + 20, y + 158, name, 18, bold=True)
+        s.chip(x + w - 74, y + 142, 'New', 11)
+        s.para(x + 20, y + 184, text, 14, w - 40, lh=19, fill=t['muted'])
+        s.para(x + 20, y + 248, tools, 12, w - 40, lh=17, fill=t['teal_text'], mono=True)
+    s.text(48, 736, 'General information, never advice: the travel rules and explainers carry their sources and the date they were checked.', 13.5, t['muted'])
+    return s
+
+
+# ---------------------------------------------------------------- 7. Findabis for Business
+def glyph(s, key, cx, cy):
+    t = s.t
+    c, o = t['text'], .9
+    if key == 'claude':
+        s.use('claude', cx - 18, cy - 18, 36)
+    elif key == 'fb':
+        s.use('fb', cx - 18, cy - 18, 36, t['teal'])
+    elif key == 'business':
+        s.add(f'<path d="M{cx - 18} {cy - 4}L{cx} {cy - 18}L{cx + 18} {cy - 4}Z" fill="{c}" fill-opacity="{o}"/>')
+        s.rect(cx - 14, cy - 4, 28, 20, 2, c, o)
+        s.rect(cx - 4, cy + 4, 8, 12, 1, t['bg'])
+    elif key == 'confirm':
+        s.add(f'<path d="M{cx - 8} {cy - 4}v-5a8 8 0 0 1 16 0v5" fill="none" stroke="{c}" stroke-width="3" stroke-opacity="{o}"/>')
+        s.rect(cx - 13, cy - 4, 26, 20, 4, t['teal'])
+        s.add(f'<circle cx="{cx}" cy="{cy + 5}" r="3" fill="{t["on_teal"]}"/>')
+    else:
+        for dx, dy in ((-14, -14), (2, -14), (-14, 2), (2, 2)):
+            s.rect(cx + dx, cy + dy, 12, 12, 3, t['teal'] if (dx, dy) == (2, 2) else c, 1 if (dx, dy) == (2, 2) else o)
+
+
+BUSINESS_STEPS = [
+    ('claude', 'Your assistant', 'Add the business server as a custom connector'),
+    ('fb', 'Sign in to Findabis', 'Your own account — never a shared API key'),
+    ('business', 'Pick your business', 'If you work at more than one'),
+    ('confirm', 'Confirm it’s you', 'Fresh 2FA or a passkey, and the work-account tick'),
+    ('tools', 'Its own tools', 'Your business’s tools, cut to what your role may do'),
+]
+BUSINESS_TYPES = [('Clinics', 12, 'schedule (no patients), reviews, questions, listing check'),
+                  ('Pharmacies', 13, 'the order queue (no patients), stock, reviews'),
+                  ('Brands', 11, 'products, stockists, submissions for review'),
+                  ('Suppliers & cultivators', 9, 'stock by batch, wholesale orders, licence'),
+                  ('Creators', 10, 'content links, products to link')]
+
+
+def business_connect(theme):
+    t = THEMES[theme]
+    s = Svg(t, 640, 'Findabis for Business, in private beta: a team member adds the business server to Claude, signs in to Findabis, picks their business, confirms a fresh second factor and gets that business’s own tools; patient data never leaves Findabis')
+    title(s, 48, 60, 'Findabis for Business', 'Private beta. A team member connects their organisation’s work AI account to their own business — by signing in, never with a key.', 28)
+    xs, y, w, h = [48, 291, 534, 777, 1020], 116, 212, 152
+    for i, (key, name, text) in enumerate(BUSINESS_STEPS):
+        x = xs[i]
+        s.card(x, y, w, h, 14)
+        s.badge(x + 22, y + 22, i + 1, 11)
+        glyph(s, key, x + w / 2, y + 44)
+        s.text(x + w / 2, y + 92, name, 16, bold=True, anchor='middle')
+        s.para(x + w / 2, y + 114, text, 12.5, w - 28, lh=17, fill=t['muted'], anchor='middle')
+        if i < 4:
+            s.arrow(x + w + 4, y + 44, xs[i + 1] - 4, y + 44, teal=True)
+    s.card(48, 300, 716, 268, 16)
+    s.text(72, 332, 'What each business’s assistant gets', 17, bold=True)
+    s.text(72, 354, 'Role-filtered: a receptionist sees fewer tools than an admin', 12.5, t['muted'])
+    for i, (name, count, text) in enumerate(BUSINESS_TYPES):
+        yy = 392 + i * 36
+        s.text(72, yy, str(count), 22, t['teal_text'], bold=True, mono=True)
+        s.text(112, yy, name, 15, bold=True)
+        s.text(330, yy, text, 13.5, t['muted'])
+    s.card(788, 300, 444, 268, 16)
+    s.add(f'<circle cx="816" cy="327" r="7" fill="{t["bad"]}"/>')
+    s.text(832, 332, 'Patients first', 17, bold=True)
+    never = ['No patient’s or customer’s details in any answer',
+             'No prescriptions, consultation notes, dispensing or payments',
+             'A personal AI account — only your organisation’s work account']
+    yy = 372
+    for item in never:
+        s.text(812, yy, '✗', 15, t['bad'], bold=True)
+        last = s.para(836, yy, item, 14.5, 372, lh=20)
+        yy = last + 30
+    s.para(812, yy + 6, 'Patient and prescription work stays inside Findabis, with Finny.', 14.5, 396, lh=20, fill=t['teal_text'], bold=True)
+    s.text(48, 604, 'Changes need the admin’s “Allow changes”: posts and FAQs are drafts, replies and answers go to moderation.', 13.5, t['muted'])
+    s.text(48, 626, 'Admins see every connection and what it did, and can stop any of them.', 13.5, t['muted'])
+    return s
+
+
 IMAGES = {'how-it-works': how_it_works, 'connect-claude': connect_claude, 'pick-a-tool': pick_a_tool,
-          'example-answer': example_answer, 'what-it-sees': what_it_sees}
+          'example-answer': example_answer, 'what-it-sees': what_it_sees, 'new-in-0-7': new_in_07,
+          'business-connect': business_connect}
 
 for name, fn in IMAGES.items():
     for theme in THEMES:
