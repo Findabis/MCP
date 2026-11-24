@@ -21,7 +21,7 @@
 <rect x="680" y="136" width="236" height="176" rx="16" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="1" stroke-opacity="0.12"/>
 <use href="#mcp" xlink:href="#mcp" x="777.0" y="161" width="42" height="42" fill="#ffffff"/>
 <text x="798.0" y="236" font-size="19" fill="#ffffff" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif" font-weight="700">Findabis MCP</text>
-<text x="798.0" y="262" font-size="14" fill="#a3aaa7" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">findabis.com/api/mcp · 10</text>
+<text x="798.0" y="262" font-size="14" fill="#a3aaa7" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">findabis.com/api/mcp · 17</text>
 <text x="798.0" y="281" font-size="14" fill="#a3aaa7" text-anchor="middle" font-family="-apple-system,'Segoe UI',Helvetica,Arial,sans-serif">read-only tools · no login</text>
 <rect x="996" y="136" width="236" height="176" rx="16" fill="#ffffff" fill-opacity="0.05" stroke="#ffffff" stroke-width="1" stroke-opacity="0.12"/>
 <use href="#fb" xlink:href="#fb" x="1093.0" y="161" width="42" height="42" fill="#01c7a4"/>

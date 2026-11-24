@@ -10,9 +10,9 @@ metadata:
 
 ## Steps
 
-1. **Find it.** `search_findabis` with the name (small misspellings still match). If several match,
-   ask which town.
-2. **Read the record.** `get_listing` with kind `clinic` or `pharmacy` and the slug: CQC registration
+1. **Find it.** `search_directory` with the name (small misspellings still match). Each match carries its kind, slug
+   and a one-line summary. If several match, ask which town.
+2. **Read the record.** `get_clinic` or `get_pharmacy` (by the kind the search returned) with the slug: CQC registration
    and rating for a clinic, GPhC registration and inspection outcome for a pharmacy, address, fees or
    delivery, and the findabis.com and regulator links.
 3. **Report plainly.** What the regulator record says today, with the date if given, and both links so

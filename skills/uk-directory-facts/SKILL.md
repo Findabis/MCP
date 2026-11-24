@@ -14,7 +14,7 @@ metadata:
    "Findabis (findabis.com), [date]". For example: "Findabis lists N prescribing clinics in the UK
    (findabis.com, 7 November 2026)."
 3. For a narrower question, count from the listing tools: `find_clinics` with `near` or
-   `consultationType`, `find_pharmacies` with `delivers`.
+   `consultationType` (`ONLINE`, `IN_PERSON`, `PHONE`), `find_pharmacies` with `delivers`.
 4. The figures are what is **listed on Findabis**, which aims to cover every UK provider. Say "listed on
    Findabis" rather than "in the UK" when precision matters.
 5. Aggregates name no provider and hold no medicine prices. Don't present the median fee as what any one

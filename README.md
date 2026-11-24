@@ -9,7 +9,7 @@
 <br/>
 
 [![MCP Registry](https://img.shields.io/badge/MCP_Registry-com.findabis%2Ffindabis-01c7a4?style=flat-square&labelColor=090909)](https://registry.modelcontextprotocol.io/)
-[![Read only](https://img.shields.io/badge/tools-10_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
+[![Read only](https://img.shields.io/badge/tools-17_read--only-01c7a4?style=flat-square&labelColor=090909)](#the-tools)
 [![No login](https://img.shields.io/badge/login-not_needed-01c7a4?style=flat-square&labelColor=090909)](#what-it-can-and-cant-see)
 [![Licence](https://img.shields.io/badge/licence-MIT-01c7a4?style=flat-square&labelColor=090909)](LICENSE)
 
@@ -166,25 +166,32 @@ Every answer links to the Findabis page it came from, so you can check a figure 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="assets/pick-a-tool-dark.svg">
   <source media="(prefers-color-scheme: light)" srcset="assets/pick-a-tool-light.svg">
-  <img alt="The ten tools as cards, each with the question it answers and what it returns: find_clinics, find_pharmacies, find_products, get_product, find_strains, find_brands, get_listing, compare_providers, search_findabis and get_directory_facts. Below them, the three prompts and the three guides." src="assets/pick-a-tool-light.svg" width="100%">
+  <img alt="The 17 tools as cards, each with the question it answers and what it returns: find_clinics, get_clinic, find_pharmacies, get_pharmacy, find_products, get_product, find_strains, get_strain, find_brands, get_brand, find_articles, get_article, find_provider_articles, get_provider_article, compare_providers, search_directory and get_directory_facts. Below them, the three prompts and the three guides." src="assets/pick-a-tool-light.svg" width="100%">
 </picture>
 
-There are ten, and they all just read:
+There are 17, and they all just read:
 
 | Tool | What it's for |
 |---|---|
 | `find_clinics` | Clinics that can prescribe, nearest first from a postcode or town, with fees, consultation types, CQC rating and reviews |
+| `get_clinic` | One clinic in full: address, hours, fees and price list, CQC record, patient types taken, partner pharmacies, FAQs |
 | `find_pharmacies` | Pharmacies that dispense a prescription you already have, with delivery and collection |
+| `get_pharmacy` | One pharmacy in full: address, hours, delivery options and prices, GPhC record, partner clinics, FAQs |
 | `find_products` | Products by name, brand, strain or form, with THC/CBD and the latest published UK price |
 | `get_product` | Everything public about one product: strength, terpenes, ingredients, allergens, leaflets |
 | `find_strains` | Strain profiles by name or genetics |
+| `get_strain` | One strain in full: genetics, cannabinoid ranges, terpenes, flavours, lineage, products made from it |
 | `find_brands` | The brands behind UK products, by name or dose form, with how many products each lists |
-| `get_listing` | One clinic, pharmacy, strain or brand page in full, with its FAQs and opening hours |
+| `get_brand` | One brand in full: location, website, its listed products and FAQs |
+| `find_articles` | Findabis's own articles on UK law, prescriptions, clinics and products, by words or category, newest first |
+| `get_article` | One Findabis article as plain text, with byline, dates and page link |
+| `find_provider_articles` | Articles that clinics and pharmacies publish on their own websites (the MCP programme), each naming the business and linking its page to cite |
+| `get_provider_article` | One of those articles as plain text; the business's view, not Findabis's |
 | `compare_providers` | Two to six clinics or pharmacies side by side |
-| `search_findabis` | One search across the lot, plus Findabis articles, when you're not sure what you're looking for; every hit comes with a one-line summary |
+| `search_directory` | One search across clinics, pharmacies, products, strains, brands and articles, when you're not sure what you're looking for; every hit comes with its kind, slug, page link and a one-line summary |
 | `get_directory_facts` | How many clinics, pharmacies, products, strains and brands are listed, the spread of first-consultation fees, how many pharmacies deliver |
 
-The list tools return up to 25 at a time; pass `offset` for the next page (each answer says where it starts).
+The `find_` tools return up to 25 at a time; pass `offset` for the next page (each answer says where it starts).
 
 There are also three prompts, which show up as slash-commands in Claude Desktop, Claude Code and Cursor: `find_care_near` (a town or postcode), `product_facts` (a product name) and `check_provider` (a clinic or pharmacy name). And three guides the assistant can read: how to get a prescription in the UK, who clinics take, and what Findabis is.
 
@@ -251,7 +258,7 @@ It runs inside the Findabis app and uses the app's own database and helpers, so 
 | [`src/server/mcp/publicServer.ts`](src/server/mcp/publicServer.ts) | Registers the tools with their read-only hints, the guides and the prompts |
 | [`src/server/mcp/prompts.ts`](src/server/mcp/prompts.ts) | The three prompts and what each asks the assistant to do |
 | [`src/server/mcp/instructions.ts`](src/server/mcp/instructions.ts) | The tool-routing guide every session gets after the disclaimer |
-| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The ten tools and the shape of what they return |
+| [`src/server/mcp/tools/public/`](src/server/mcp/tools/public) | The 17 tools and the shape of what they return |
 | [`src/server/mcp/disclaimer.ts`](src/server/mcp/disclaimer.ts) | The medical disclaimer every session gets |
 
 The diagrams in this README are SVG files in [`assets/`](assets), generated by [`scripts/make-docs-images.py`](scripts/make-docs-images.py) so they can be redrawn when the tools change. The assistant marks are their owners', used only to name the products that connect.

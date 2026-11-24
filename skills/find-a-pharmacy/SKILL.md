@@ -13,13 +13,13 @@ prescriptions to a partner pharmacy, so check the clinic's partners first.
 
 ## Steps
 
-1. **Partner pharmacies first.** If the person has a clinic, `get_listing` kind `clinic` lists its
+1. **Partner pharmacies first.** If the person has a clinic, `get_clinic` lists its
    partner pharmacies.
 2. **Search.** `find_pharmacies` with `near` (nearest first, with miles), `delivers: true` for home
-   delivery, `collection: true` to collect in person, `minRating`.
+   delivery, `collection: true` to collect in person, `minRating` (`3_plus` or `4_plus`).
 3. **Compare.** `compare_providers` kind `pharmacy` with 2–6 slugs: delivery and its cheapest price,
    free-delivery threshold, collection, GPhC registration and inspection outcome, reviews.
-4. **One pharmacy in full.** `get_listing` kind `pharmacy`: address, opening hours, delivery prices,
+4. **One pharmacy in full.** `get_pharmacy` with the slug: address, opening hours, delivery prices,
    GPhC record, partner clinics, FAQs.
 
 ## What the tools do not tell you

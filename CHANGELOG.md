@@ -3,6 +3,20 @@
 Versions match the `version` the server reports in its handshake and on its
 [registry card](https://findabis.com/.well-known/mcp/server.json).
 
+## 0.7.0 — 2026-11 (draft: the owner signs the copy before `scripts/release.sh`)
+
+- New `find_suppliers` and `get_supplier`: licensed cultivators, manufacturers and distributors — roles, location,
+  brands and product count, in name order (never by sponsorship). No stock or wholesale prices.
+- New `find_creators` and `get_creator`: creators listed on Findabis — channels, recent videos and their shop link.
+  Creators are never reviewed or rated, and their videos are not linked to medicines.
+- New `get_travel_rules`: one country's checked rule for travelling with prescribed cannabis, with its sources and
+  review date and nearby countries, or every country with one status. Not legal advice.
+- New `explain_topic`: short, sourced explainers (prescribing, specialist checks, costs, driving, work and drug
+  tests, switching, shortages, complaints…). Describes how things work; never advises anyone personally.
+- `find_strains` takes THC and CBD ranges, terpenes, flavours and "has products".
+- Resource templates `findabis://{clinic,pharmacy,product,strain,brand,supplier,creator}/{slug}`, and a lighter tool
+  list: each `get_` tool now advertises only its own output shape.
+
 ## 0.6.0 — 2026-11
 
 - One `find_` and one `get_` tool per kind. `get_listing` is replaced by `get_clinic`, `get_pharmacy`, `get_strain`

@@ -11,7 +11,7 @@ metadata:
 ## Products
 
 1. `find_products` with `query` (product, brand or strain name), or `category` for a dose form
-   (flower, oil, …), or `genetics`. Use `search_findabis` if you are unsure what the name is.
+   (flower, oil, …), or `genetics`. Use `search_directory` if you are unsure what the name is.
 2. `get_product` with the slug: dose form and strength, strain and brand, terpenes, contents (carrier
    oil, allergens, capsule shell), dosage and storage notes, patient leaflets, FAQs, and the UK price
    range when Findabis publishes one.
@@ -22,7 +22,7 @@ metadata:
 
 ## Strains
 
-1. `find_strains` by name or `genetics` (Indica, Sativa, Hybrid), then `get_listing` kind `strain` for
+1. `find_strains` by name or `genetics` (Indica, Sativa, Hybrid), then `get_strain` with the slug for
    cannabinoid ranges, terpenes, flavours, lineage and the products made from it.
 2. A strain is a plant lineage, not something a pharmacy dispenses. For what can be prescribed, use the
    products made from it.
@@ -31,7 +31,7 @@ metadata:
 
 ## Brands
 
-`find_brands` by name or dose form, then `get_listing` kind `brand` (location, website, products) or
+`find_brands` by name or dose form, then `get_brand` with the slug (location, website, products) or
 `find_products` with the brand name as `query`. A listing is not an endorsement.
 
 ## Answering rules

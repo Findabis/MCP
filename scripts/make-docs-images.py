@@ -164,7 +164,7 @@ def how_it_works(theme):
     nodes = [
         ('you', 'You', 'Ask a question in plain English'),
         ('assistant', 'Your assistant', 'Picks a Findabis tool and calls it'),
-        ('mcp', 'Findabis MCP', 'findabis.com/api/mcp · 10 read-only tools · no login'),
+        ('mcp', 'Findabis MCP', 'findabis.com/api/mcp · 17 read-only tools · no login'),
         ('data', 'Live directory', 'Clinics, pharmacies, products, strains and brands'),
     ]
     xs, y, w, h = [48, 364, 680, 996], 136, 236, 176
@@ -288,21 +288,28 @@ def connect_claude(theme):
 # ---------------------------------------------------------------- 3. which tool
 TOOLS = [
     ('find_clinics', '“Which clinics near Leeds do video consultations?”', 'Nearest first with miles, fees, a year-one estimate, CQC rating and reviews'),
+    ('get_clinic', '“Tell me about this clinic.”', 'Fees, price list, CQC record, patient types, partner pharmacies, FAQs, opening hours'),
     ('find_pharmacies', '“Which pharmacies near SW1A deliver?”', 'Nearest first with delivery, collection and reviews'),
+    ('get_pharmacy', '“Tell me about this pharmacy.”', 'Delivery options and prices, GPhC record, partner clinics, FAQs, opening hours'),
     ('find_products', '“Which oils does this brand list?”', 'Dose form, THC and CBD, and the latest published UK price'),
     ('get_product', '“What’s in this oil — carrier, allergens, strength?”', 'Terpenes, contents, leaflets, FAQs and the public price range'),
     ('find_strains', '“Is Blue Dream an indica or a sativa?”', 'Genetics and THC/CBD ranges — never effects or uses'),
+    ('get_strain', '“What’s the lineage of Gelato?”', 'Cannabinoid ranges, terpenes, flavours, lineage, products made from it'),
     ('find_brands', '“Who makes capsules for the UK market?”', 'Brands by name or dose form, with how many products each lists'),
-    ('get_listing', '“Tell me about this clinic.”', 'Fees, policy, CQC or GPhC record, FAQs, opening hours, partners'),
+    ('get_brand', '“Tell me about this brand.”', 'Location, website, its listed products and FAQs'),
+    ('find_articles', '“What does Findabis say about travelling abroad?”', 'Findabis articles on UK law, prescriptions, clinics and products, newest first'),
+    ('get_article', '“Read me that article.”', 'The article as plain text, with byline, dates and page link'),
+    ('find_provider_articles', '“What does a clinic say about a first consultation?”', 'Articles clinics and pharmacies publish on their own sites, to cite'),
+    ('get_provider_article', '“Read me that clinic’s article.”', 'The article as plain text, with the business and the page on its own site'),
     ('compare_providers', '“Which of these three is cheapest in year one?”', 'Two to six clinics or pharmacies side by side, services only'),
-    ('search_findabis', '“What’s Tilray?”', 'Anything by name: kind, slug, page link and a one-line summary'),
+    ('search_directory', '“What’s Tilray?”', 'Anything by name: kind, slug, page link and a one-line summary'),
     ('get_directory_facts', '“How many clinics are listed, and what’s a typical first fee?”', 'Counts, fee range and median, delivery counts, last-updated dates'),
 ]
 
 
 def pick_a_tool(theme):
     t = THEMES[theme]
-    s = Svg(t, 840, 'The ten Findabis tools, each with the question it answers and what it returns')
+    s = Svg(t, 1380, 'The 17 Findabis tools, each with the question it answers and what it returns')
     title(s, 48, 60, 'Which tool answers what', 'Your assistant chooses these itself. This is what each one is for, and what it gives back.', 28)
     w, h = 580, 120
     for i, (name, q, r) in enumerate(TOOLS):
@@ -312,8 +319,8 @@ def pick_a_tool(theme):
         s.text(x + 22, y + 36, name, 17, t['teal_text'], bold=True, mono=True)
         s.text(x + 22, y + 65, q, 16)
         s.para(x + 22, y + 92, r, 15, w - 44, lh=19, fill=t['muted'])
-    s.text(48, 798, 'Also three prompts, shown as slash-commands: find_care_near · product_facts · check_provider', 14, t['muted'])
-    s.text(48, 820, 'And three guides the assistant can read: how to get a prescription in the UK · who clinics take · about Findabis and its data', 14, t['muted'])
+    s.text(48, 1338, 'Also three prompts, shown as slash-commands: find_care_near · product_facts · check_provider', 14, t['muted'])
+    s.text(48, 1360, 'And three guides the assistant can read: how to get a prescription in the UK · who clinics take · about Findabis and its data', 14, t['muted'])
     return s
 
 
