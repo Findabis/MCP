@@ -15,6 +15,20 @@ key that `pnpm mcp:publish` reads from `~/.config/findabis-mcp/private-key.hex` 
 gh secret set MCP_REGISTRY_PRIVATE_KEY -R Findabis/MCP < ~/.config/findabis-mcp/private-key.hex
 ```
 
+## The short way: one command from the app, after deploying
+
+```bash
+# in ../Findabis, once the new MCP_SERVER_VERSION is committed
+pnpm run deploy
+pnpm mcp:release              # or --dry-run first to see every check
+```
+
+It waits until findabis.com serves the code's version (server card and GET probe), checks the registry doesn't have
+it yet, checks this repo (on `main`, nothing uncommitted, no tag yet, a finished `## X.Y.Z` section in CHANGELOG.md,
+and warns when the README describes Findabis for Business while it is switched off), asks once, runs
+`scripts/release.sh` below, then follows the publish workflow until the registry lists the version. The steps below
+are what it runs, for doing it by hand.
+
 ## Each release
 
 1. **Cut it from this repo.** With the app checked out beside this one (`../Findabis`):
